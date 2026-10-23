@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import HomeMotion from "./home-motion";
@@ -10,7 +9,7 @@ export default function Home() {
   return (
     <ViewTransition default="site-page"><HomeMotion>
       <section className="archive-hero" aria-labelledby="hero-title">
-        <div className="archive-hero__image" aria-hidden="true"><Image src={`${imageBasePath}/images/hero-architecture.png`} alt="" fill priority sizes="100vw" /></div>
+        <div className="archive-hero__image" aria-hidden="true"><picture><source media="(max-width: 720px)" srcSet={`${imageBasePath}/images/hero-architecture-mobile.webp`} /><img src={`${imageBasePath}/images/hero-architecture-desktop.webp`} alt="" fetchPriority="high" decoding="async" width="1920" height="1280" /></picture></div>
         <div className="archive-hero__veil" aria-hidden="true" />
         <header className="archive-nav" data-hero-enter><Link className="archive-brand" href="/" aria-label="На главную">К.</Link><p>Личная подборка<br />новостроек Уфы</p><nav aria-label="Основная навигация"><Link href="/kvartiry">Подборка</Link><Link href="/podbor">Написать</Link></nav><MobileMenu /></header>
         <div className="archive-hero__copy" data-hero-enter><p className="archive-kicker">Выбор без витрины</p><h1 id="hero-title">Не просто<br /><em>новая квартира.</em></h1><p className="archive-hero__lead">Собираю новостройки, в которых есть смысл жить: разбираю планировки, условия и нюансы до того, как вы примете решение.</p><div className="archive-actions"><Link className="archive-button" href="/kvartiry">Открыть подборку</Link><Link className="archive-text-link" href="/podbor">Обсудить свой запрос</Link></div></div>
