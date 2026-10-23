@@ -70,3 +70,7 @@ id_ed25519
 .playwright-cli/
 .ai-web-studio-backup/
 # --- end AI Web Studio ---
+
+# Generated automatically by scripts/optimize-hero.mjs
+/public/images/hero-architecture-mobile.webp
+/public/images/hero-architecture-desktop.webp
