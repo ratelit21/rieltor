@@ -427,6 +427,9 @@ legend { margin-bottom: 13px; color: var(--champagne); font-size: var(--label-si
   .archive-story__scan { font-size: 14px; }
   .archive-story__vertical { display: none; }
 }
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  .archive-story__progress-track, .archive-story__foot > :last-child { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
   .archive-story__photo, .archive-story__progress-track > span { transform: none; }
 }
