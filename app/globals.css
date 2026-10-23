@@ -15,8 +15,8 @@
   --content-gutter: clamp(20px, 8vw, 120px);
   --section-space: clamp(68px, 7.5vw, 116px);
   --control-height: 52px;
-  --label-size: clamp(15px, 1.14vw, 17px);
-  --action-size: clamp(14px, 1.07vw, 16px);
+  --label-size: clamp(16px, 1.15vw, 18px);
+  --action-size: clamp(15px, 1.05vw, 16px);
 }
 
 * { box-sizing: border-box; }
@@ -285,7 +285,7 @@ legend { margin-bottom: 13px; color: var(--champagne); font-size: var(--label-si
 .listing-image { position: relative; min-height: 390px; overflow: hidden; background: #dedad0; }
 .listing-image img { object-fit: contain; transition: transform .55s ease; }
 .listing-image:hover img { transform: scale(1.035); }
-.listing-image span { position: absolute; bottom: 15px; left: 15px; padding: 9px 12px; background: var(--ivory); color: var(--forest); font-size: var(--label-size); letter-spacing: .055em; text-transform: uppercase; }
+.listing-image span { position: absolute; bottom: 15px; left: 15px; padding: 9px 12px; background: var(--forest); color: var(--ivory); font-size: var(--label-size); letter-spacing: .012em; text-transform: none; }
 .listing-copy { align-self: center; padding: clamp(28px,4vw,58px); }
 .listing-copy > p:first-child, .listing-copy > span { color: var(--champagne); font-size: var(--label-size); line-height: 1.5; letter-spacing: .01em; text-transform: none; }
 .listing-copy > p:nth-of-type(2) { max-width: 470px; margin: 20px 0 0; line-height: 1.7; }
@@ -294,21 +294,9 @@ legend { margin-bottom: 13px; color: var(--champagne); font-size: var(--label-si
 .empty button { min-height: 44px; padding: 7px 0; border: 0; border-bottom: 1px solid var(--champagne); color: var(--champagne); background: none; }
 
 /* Contact and detail: same controls, individual layouts. */
-/* A filmic frame is an architectural detail, not an animated button. */
-.archive-hero__viewfinder {
-  position: absolute;
-  z-index: 0;
-  inset: clamp(72px, 8vw, 130px) clamp(20px, 4.5vw, 76px) clamp(55px, 7vw, 100px);
-  border: 1px solid rgba(243,238,229,.23);
-  pointer-events: none;
-}
-.archive-hero__viewfinder span { position: absolute; width: 28px; height: 28px; border-color: var(--champagne); border-style: solid; }
-.archive-hero__viewfinder span:nth-child(1) { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-.archive-hero__viewfinder span:nth-child(2) { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
-.archive-hero__viewfinder span:nth-child(3) { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
-.archive-hero__viewfinder span:nth-child(4) { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+/* Hero uses the architecture itself; no viewfinder border. */
 .archive-hero__copy, .archive-nav, .archive-hero__caption, .archive-demo-note { position: relative; z-index: 1; }
-.archive-hero__caption > span { display: block; font: 500 13px/1.5 var(--sans); color: var(--champagne); letter-spacing: .04em; }
+.archive-hero__caption > span { display: block; font: 400 var(--label-size)/1.5 var(--sans); color: var(--champagne); letter-spacing: .01em; }
 .archive-hero__caption a {
   display: inline-flex;
   gap: 18px;
@@ -391,18 +379,15 @@ legend { margin-bottom: 13px; color: var(--champagne); font-size: var(--label-si
   pointer-events: none;
 }
 .archive-story__plan img { width: 100%; min-height: 0; flex: 1; object-fit: contain; }
-.archive-story__plan > span { margin-top: 12px; font-size: 13px; line-height: 1.5; font-weight: 400; letter-spacing: .02em; }
-.archive-story__corner { position: absolute; width: 60px; height: 60px; border: 1px solid rgba(243,238,229,.82); pointer-events: none; }
-.archive-story__corner--tl { left: 22px; top: 22px; border-right: 0; border-bottom: 0; }
-.archive-story__corner--br { right: 22px; bottom: 22px; border-left: 0; border-top: 0; }
-.archive-story__vertical { position: absolute; top: 50%; right: 14px; color: rgba(243,238,229,.85); font-size: 13px; writing-mode: vertical-rl; transform: translateY(-50%); letter-spacing: .08em; }
-.archive-story__scan { position: absolute; bottom: 24px; left: 24px; color: rgba(243,238,229,.94); font: 400 16px/1.4 var(--serif); }
+.archive-story__plan > span { margin-top: 12px; font-size: 16px; line-height: 1.5; font-weight: 400; letter-spacing: .02em; }
+.archive-story__vertical { position: absolute; top: 50%; right: 14px; color: rgba(243,238,229,.85); font-size: 15px; writing-mode: vertical-rl; transform: translateY(-50%); letter-spacing: .05em; }
+.archive-story__scan { position: absolute; bottom: 24px; left: 24px; color: rgba(243,238,229,.94); font: 400 19px/1.4 var(--serif); }
 .archive-story__foot { display: flex; gap: 16px; align-items: center; height: 55px; font-size: 14px; }
 .archive-story__foot > :first-child { flex: 0 0 auto; }
 .archive-story__foot > :last-child { flex: 0 0 auto; font-variant-numeric: tabular-nums; }
 .archive-story__progress-track { flex: 1; height: 1px; background: var(--line); overflow: hidden; }
 .archive-story__progress-track > span { display: block; width: 100%; height: 100%; background: var(--champagne); transform: scaleX(.3333); transform-origin: left center; }
-.archive-story__end { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 0 var(--content-gutter); padding: 30px 0 76px; border-top: 1px solid var(--line); font-size: 15px; }
+.archive-story__end { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 0 var(--content-gutter); padding: 30px 0 76px; border-top: 1px solid var(--line); font-size: var(--label-size); }
 .archive-story__end a { display: inline-flex; align-items: center; gap: 28px; padding: 7px 0; border-bottom: 1px solid var(--champagne); font-size: 16px; color: var(--champagne); }
 .archive-story__end a:hover { color: var(--ivory); border-color: var(--ivory); }
 .archive-story__end a:focus-visible { outline: 2px solid var(--champagne); outline-offset: 4px; }
@@ -433,23 +418,20 @@ legend { margin-bottom: 13px; color: var(--champagne); font-size: var(--label-si
   .archive-story__end { padding-bottom: 58px; }
 }
 @media (max-width: 720px) {
-  .archive-hero__viewfinder { display: none; }
   .archive-story__intro { font-size: clamp(40px, 9.7vw, 52px); }
   .archive-story__visual { min-height: 310px; height: 390px; }
   .archive-story__canvas { height: calc(100% - 48px); }
   .archive-story__chapter h3 { font-size: clamp(37px, 9vw, 52px); }
   .archive-story__chapter > p { font-size: 16px; }
   .archive-story__end { align-items: start; flex-direction: column; gap: 17px; padding-bottom: 55px; }
-  .archive-story__corner { width: 35px; height: 35px; }
   .archive-story__scan { font-size: 14px; }
   .archive-story__vertical { display: none; }
-  .archive-intro h2 em { padding-inline: .08em; }
 }
 @media (prefers-reduced-motion: reduce) {
   .archive-story__photo, .archive-story__progress-track > span { transform: none; }
 }
 
-/* Contact continues the same ivory editorial page language as the catalogue. */
+/* Contact inherits the same deep forest art direction as the archive. */
 .contact { min-height: 100svh; background: var(--canvas); color: var(--ivory); }
 .contact-frame {
   display: grid;
