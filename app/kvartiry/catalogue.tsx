@@ -78,14 +78,13 @@ export default function Catalogue() {
               <Link className="listing-image" href={`/kvartiry/${item.slug}`} aria-label={`Подробнее: ${item.name}`}>
                 <Image src={item.image} alt={`Планировка «${item.name}»`} fill
                   sizes="(max-width: 720px) 100vw, 50vw" priority={index === 0} />
-                <span>Планировка</span>
               </Link>
               <div className="listing-copy">
                 <p>{roomLabel(item.rooms)} · {item.area} м²</p>
                 <h2>{item.name}</h2>
                 <span>{item.district}</span>
                 <p>{item.description}</p>
-                <Link href={`/kvartiry/${item.slug}`}>Смотреть вариант <span aria-hidden="true">↗</span></Link>
+                <Link href={`/kvartiry/${item.slug}`}><span className="listing-copy__action-label">Смотреть вариант</span><span className="listing-copy__arrow" aria-hidden="true">↗</span></Link>
               </div>
             </article>
           ))}
