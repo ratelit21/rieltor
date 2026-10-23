@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -84,7 +85,7 @@ export default function Catalogue() {
                 <h2>{item.name}</h2>
                 <span>{item.district}</span>
                 <p>{item.description}</p>
-                <Link href={`/kvartiry/${item.slug}`}><span className="listing-copy__action-label">Смотреть вариант</span><span className="listing-copy__arrow" aria-hidden="true">↗</span></Link>
+                <Link href={`/kvartiry/${item.slug}`}><span className="listing-copy__action-label">Смотреть вариант</span><ArrowUpRight className="listing-copy__arrow" aria-hidden="true" strokeWidth={1.7} /></Link>
               </div>
             </article>
           ))}
