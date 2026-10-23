@@ -53,6 +53,12 @@ try {
         assert.equal(await page.locator("svg.listing-copy__arrow").count(),6);
         // All six cards must show their full image frames, regardless of scroll
         // order and whether animations have hydrated.
+        // Lazy-loaded floorplans should resolve when scrolled into view.
+        for(let i=0;i<6;i++) {
+          const image=page.locator(".listing-image img").nth(i);
+          await image.scrollIntoViewIfNeeded();
+          await image.evaluate(img=>img.decode());
+        }
         const cards=await page.locator("[data-listing]").evaluateAll(nodes=>nodes.map(card=>{
           const outer=card.getBoundingClientRect();
           const frame=card.querySelector(".listing-image");
