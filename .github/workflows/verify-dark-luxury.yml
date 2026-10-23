@@ -1,0 +1,29 @@
+name: Verify dark luxury direction
+
+on:
+  push:
+    branches: [fix/dark-luxury-art-direction-20261023]
+
+permissions:
+  contents: read
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BASE_PATH: /rieltor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: |
+          mkdir -p /tmp/rieltor-review/rieltor
+          cp -a out/. /tmp/rieltor-review/rieltor/
+          python3 -m http.server 4173 --directory /tmp/rieltor-review &
+          sleep 2
+          node scripts/dark-theme-visual-verify.mjs
