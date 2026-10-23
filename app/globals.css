@@ -355,13 +355,13 @@ legend { margin-bottom: 13px; color: var(--forest); font-size: var(--label-size)
 .archive-story__chapter:last-child { border-bottom: 0; }
 .archive-story__chapter-index { display: flex; justify-content: space-between; align-items: baseline; max-width: 500px; gap: 14px; font-size: 15px; font-weight: 400; color: var(--moss); }
 .archive-story__chapter-index span:first-child { font: 400 28px/1 var(--serif); color: var(--forest); }
-.archive-story__chapter h2 {
+.archive-story__chapter h3 {
   max-width: 590px;
   margin: 34px 0 22px;
   font: 400 clamp(43px, 4.7vw, 70px)/1.12 var(--serif);
   letter-spacing: -.05em;
 }
-.archive-story__chapter h2 em { color: var(--moss); font-style: italic; }
+.archive-story__chapter h3 em { color: var(--moss); font-style: italic; }
 .archive-story__chapter > p { max-width: 420px; margin: 0; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.75; }
 .archive-story__visual { position: sticky; top: clamp(88px, 12vh, 126px); height: min(74vh, 760px); min-height: 440px; }
 .archive-story__canvas { position: relative; height: calc(100% - 55px); overflow: hidden; background: var(--forest); isolation: isolate; }
@@ -422,7 +422,7 @@ legend { margin-bottom: 13px; color: var(--forest); font-size: var(--label-size)
   .archive-story__visual { position: relative; top: auto; order: -1; height: min(65vh, 540px); min-height: 350px; }
   .archive-story__chapters { display: grid; grid-template-columns: 1fr; }
   .archive-story__chapter { min-height: 0; padding: 34px 0; }
-  .archive-story__chapter h2 { margin: 18px 0; font-size: clamp(36px, 6vw, 58px); }
+  .archive-story__chapter h3 { margin: 18px 0; font-size: clamp(36px, 6vw, 58px); }
   .archive-story__chapter-index span:first-child { font-size: 23px; }
   .archive-story__foot { height: 48px; }
   .archive-story__end { padding-bottom: 58px; }
@@ -432,7 +432,7 @@ legend { margin-bottom: 13px; color: var(--forest); font-size: var(--label-size)
   .archive-story__intro { font-size: clamp(40px, 9.7vw, 52px); }
   .archive-story__visual { min-height: 310px; height: 390px; }
   .archive-story__canvas { height: calc(100% - 48px); }
-  .archive-story__chapter h2 { font-size: clamp(37px, 9vw, 52px); }
+  .archive-story__chapter h3 { font-size: clamp(37px, 9vw, 52px); }
   .archive-story__chapter > p { font-size: 16px; }
   .archive-story__end { align-items: start; flex-direction: column; gap: 17px; padding-bottom: 55px; }
   .archive-story__corner { width: 35px; height: 35px; }
