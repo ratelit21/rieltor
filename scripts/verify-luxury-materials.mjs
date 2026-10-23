@@ -114,6 +114,7 @@ try {
   assert.ok(Number(state.alpha)>.95,"plan did not fade in: "+JSON.stringify(state));
   assert.equal(state.visible,"visible");
   console.log("PLAN CROSSFADE",JSON.stringify({size,state}));
+  console.log("STORY_FRAME|" + (await page.screenshot({type:"jpeg",quality:42})).toString("base64"));
   const next=page.locator("[data-story-beat]").nth(2);
   const y=await next.evaluate(el=>el.getBoundingClientRect().top+window.scrollY);
   await page.evaluate(v=>scrollTo({top:v-300,behavior:"instant"}),y);
