@@ -1,0 +1,37 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+.envrc
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.keystore
+secrets/
+credentials/
+service-account*.json
+firebase-adminsdk*.json
+
+# Local AI tooling and planning material
+.agents/
+.codex/
+.cursor/
+.omo/
+AGENTS.md
+bin/codex-rieltor
+docs/studio/
+realtor_site_bot_full_plan.md
+
+# Dependencies and build outputs
+node_modules/
+.next/
+out/
+dist/
+coverage/
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
