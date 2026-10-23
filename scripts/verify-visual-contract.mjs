@@ -51,6 +51,32 @@ try {
         assert.ok(contrast(theme.activeBg,theme.activeFg)>=4.5,"selected filter contrast insufficient");
         assert.equal(await page.locator(".listing-image span").count(),0);
         assert.equal(await page.locator("svg.listing-copy__arrow").count(),6);
+        // All six cards must show their full image frames, regardless of scroll
+        // order and whether animations have hydrated.
+        // Lazy-loaded floorplans should resolve when scrolled into view.
+        for(let i=0;i<6;i++) {
+          const image=page.locator(".listing-image img").nth(i);
+          await image.scrollIntoViewIfNeeded();
+          await image.evaluate(img=>img.decode());
+        }
+        const cards=await page.locator("[data-listing]").evaluateAll(nodes=>nodes.map(card=>{
+          const outer=card.getBoundingClientRect();
+          const frame=card.querySelector(".listing-image");
+          const image=frame.querySelector("img");
+          const rect=frame.getBoundingClientRect();
+          const style=getComputedStyle(frame);
+          return {card:outer.width,frame:rect.width,clip:style.clipPath,
+            transform:style.transform,imageLoaded:image.complete&&image.naturalWidth>0};
+        }));
+        assert.equal(cards.length,6);
+        for(const [i,card] of cards.entries()) {
+          assert.equal(card.clip,"none","Listing "+(i+1)+" remains clipped");
+          assert.equal(card.transform,"none","Listing "+(i+1)+" remains transformed");
+          assert.ok(card.frame>200 && card.frame>=card.card*(width<=720?.95:.45),
+            "Listing "+(i+1)+" isn't full width: "+JSON.stringify(card));
+          assert.ok(card.imageLoaded,"Listing "+(i+1)+" plan did not load");
+        }
+        console.log("FULL CARDS",width,JSON.stringify(cards.map(x=>Math.round(x.frame))));
         const align=await page.locator(".listing-copy a").first().evaluate(el=>{
           const a=el.querySelector(".listing-copy__action-label").getBoundingClientRect();
           const b=el.querySelector(".listing-copy__arrow").getBoundingClientRect();
@@ -60,6 +86,21 @@ try {
         await page.getByRole("button",{name:"1 комната",exact:true}).click();
         assert.equal(await page.locator("[data-listing]").count(),1);
         await page.getByRole("button",{name:"Все",exact:true}).click();
+        // Visible CTA hover with readable foreground and a changed fill.
+        const cta=page.locator(".listing-copy a").first();
+        const getButton=()=>cta.evaluate(el=>{
+          const style=getComputedStyle(el);
+          return {bg:style.backgroundColor,fg:style.color,border:style.borderTopColor};
+        });
+        const normal=await getButton();
+        await cta.hover();await page.waitForTimeout(340);
+        const hovered=await getButton();
+        assert.notEqual(hovered.bg,normal.bg,"CTA hover didn't visibly change fill");
+        assert.ok(contrast(hovered.bg,hovered.fg)>=4.5,
+          "CTA hover foreground lost contrast: "+JSON.stringify(hovered));
+        assert.ok(contrast(hovered.bg,theme.bg)>=1.05,
+          "CTA hover merged with whole page canvas");
+        console.log("HOVER",width,JSON.stringify({normal,hovered}));
         console.log("CATALOG",width,JSON.stringify({...theme,arrowDelta:align}));
       }
       if(route==="/podbor/") {
@@ -84,7 +125,38 @@ try {
         assert.notEqual(color.bg,color.panel);
         console.log("DETAIL",width,JSON.stringify(color));
       }
+      if(width===390&&route==="/"){
+        const menu=page.getByRole("button",{name:"Открыть меню"});
+        await menu.click();
+        assert.equal(await page.locator("svg.lucide-x").count(),1);
+        assert.equal(await page.locator(".mobile-menu__panel a").count(),2);
+        await page.getByRole("button",{name:"Закрыть меню"}).click();
+      }
+      if(width===1440) {
+        const selectors = route==="/" ?
+          [".archive-actions .archive-button",".archive-actions .archive-text-link",
+            ".archive-intro .intro-cta",".archive-callout .archive-button"] :
+          route==="/podbor/" ? [".contact-form__submit",".page-nav .nav-cta"] :
+          route.includes("pervyy-svet") ? [".detail .primary",".page-nav .nav-cta"] :
+          [".archive-page__nav .nav-cta",'.filters button[aria-pressed="false"]'];
+        for(const selector of selectors) {
+          const target=page.locator(selector).first();
+          const before=await target.evaluate(el=>getComputedStyle(el).backgroundColor);
+          await target.hover(); await page.waitForTimeout(310);
+          const state=await target.evaluate(el=>{
+            const style=getComputedStyle(el);
+            return {bg:style.backgroundColor,fg:style.color};
+          });
+          assert.notEqual(state.bg,before,"No visible hover background for "+selector);
+          if(!state.bg.startsWith("rgba")) {
+            assert.ok(contrast(state.bg,state.fg)>=4.5,
+              "Hover contrast fails for "+selector+": "+JSON.stringify(state));
+          }
+          console.log("HOVER PASS",route,selector,JSON.stringify(state));
+        }
+      }
       console.log("PASS",width,route,JSON.stringify(props));
+
 
     }
     assert.deepEqual(errors,[]);
