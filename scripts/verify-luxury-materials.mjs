@@ -41,11 +41,14 @@ try {
         const theme=await page.evaluate(()=>({
           bg:getComputedStyle(document.querySelector(".archive-page")).backgroundColor,
           ink:getComputedStyle(document.querySelector(".archive-page")).color,
-          filter:getComputedStyle(document.querySelector(".filters button")).color,
+          filter:getComputedStyle(document.querySelector('.filters button[aria-pressed="false"]')).color,
+          activeBg:getComputedStyle(document.querySelector('.filters button[aria-pressed="true"]')).backgroundColor,
+          activeFg:getComputedStyle(document.querySelector('.filters button[aria-pressed="true"]')).color,
           listing:getComputedStyle(document.querySelector(".listing")).backgroundColor,
         }));
         assert.ok(contrast(theme.bg,theme.ink)>=4.5,"catalogue contrast insufficient");
         assert.ok(contrast(theme.bg,theme.filter)>=4.5,"filter contrast insufficient");
+        assert.ok(contrast(theme.activeBg,theme.activeFg)>=4.5,"selected filter contrast insufficient");
         assert.equal(await page.locator(".listing-image span").count(),0);
         assert.equal(await page.locator("svg.listing-copy__arrow").count(),6);
         const align=await page.locator(".listing-copy a").first().evaluate(el=>{
