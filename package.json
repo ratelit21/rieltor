@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
-    "build": "next build"
+    "build": "next build",
+    "predev": "node scripts/optimize-hero.mjs",
+    "prebuild": "node scripts/optimize-hero.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
