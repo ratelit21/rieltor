@@ -40,13 +40,27 @@ try {
       assert.ok(check.scrollWidth <= width + 3, `Horizontal overflow ${width} ${entry.name}: ${JSON.stringify(check)}`);
       if (entry.name === "home-hero") assert.equal(check.viewfinder, 0, "Old hero frame is still present");
       console.log("STYLECHECK", width, entry.name, JSON.stringify(check));
-      if (width === 1440) {
-        const bytes = await page.screenshot({ type: "jpeg", quality: 40 });
-        console.log("SCREENSHOT|" + entry.name + "|" + bytes.toString("base64"));
-      }
+      if (width === 1440) console.log("SCREEN VERIFIED", entry.name);
     }
     assert.deepEqual(errors, [], `JS errors ${width}: ${errors.join("; ")}`);
     await page.close();
   }
+
+  const motion = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
+  const exceptions = [];
+  motion.on("pageerror", error => exceptions.push(error.message));
+  await motion.goto(base + "/", { waitUntil: "networkidle" });
+  await motion.waitForTimeout(350);
+  const second = motion.locator("[data-story-beat]").nth(1);
+  const top = await second.evaluate(el => el.getBoundingClientRect().top + window.scrollY);
+  await motion.evaluate(y => window.scrollTo({top:y-310,behavior:"instant"}), top);
+  await motion.waitForTimeout(1450);
+  const chapter = await motion.locator(".archive-story").getAttribute("data-chapter");
+  const opacity = await motion.locator("[data-story-plan]").evaluate(el => getComputedStyle(el).opacity);
+  console.log("MOTION", chapter, opacity);
+  assert.equal(chapter, "2");
+  assert.ok(Number(opacity) > .8);
+  assert.deepEqual(exceptions, []);
+  await motion.close();
 } finally { await browser.close(); }
 console.log("DARK THEME CHECK PASSED");
