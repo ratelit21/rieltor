@@ -132,6 +132,29 @@ try {
         assert.equal(await page.locator(".mobile-menu__panel a").count(),2);
         await page.getByRole("button",{name:"Закрыть меню"}).click();
       }
+      if(width===1440) {
+        const selectors = route==="/" ?
+          [".archive-actions .archive-button",".archive-actions .archive-text-link",
+            ".archive-intro .intro-cta",".archive-callout .archive-button"] :
+          route==="/podbor/" ? [".contact-form__submit",".page-nav .nav-cta"] :
+          route.includes("pervyy-svet") ? [".detail .primary",".page-nav .nav-cta"] :
+          [".archive-page__nav .nav-cta",'.filters button[aria-pressed="false"]'];
+        for(const selector of selectors) {
+          const target=page.locator(selector).first();
+          const before=await target.evaluate(el=>getComputedStyle(el).backgroundColor);
+          await target.hover(); await page.waitForTimeout(310);
+          const state=await target.evaluate(el=>{
+            const style=getComputedStyle(el);
+            return {bg:style.backgroundColor,fg:style.color};
+          });
+          assert.notEqual(state.bg,before,"No visible hover background for "+selector);
+          if(!state.bg.startsWith("rgba")) {
+            assert.ok(contrast(state.bg,state.fg)>=4.5,
+              "Hover contrast fails for "+selector+": "+JSON.stringify(state));
+          }
+          console.log("HOVER PASS",route,selector,JSON.stringify(state));
+        }
+      }
       console.log("PASS",width,route,JSON.stringify(props));
       if(width===1440) {
         const buffer=await page.screenshot({type:"jpeg",quality:35});
