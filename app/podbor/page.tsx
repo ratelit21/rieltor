@@ -2,10 +2,24 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { type FormEvent, Suspense, ViewTransition, useState } from "react";
+import { type FormEvent, Suspense, ViewTransition, useState, useRef } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 import { apartments } from "../apartments";
 
+gsap.registerPlugin(useGSAP);
+
 function SelectionForm() {
+  const scope = useRef<HTMLElement>(null);
+  useGSAP(() => {
+    const panel = scope.current?.querySelector<HTMLElement>(".contact-panel");
+    if (!panel || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    gsap.fromTo(panel,
+      { y: 30, opacity: 0.84, clipPath: "inset(0 0 6% 0)" },
+      { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0)", duration: 1.1, ease: "power3.out" },
+    );
+  }, { scope });
+
   const params = useSearchParams();
   const selected = apartments.find((item) => item.slug === params.get("apartment"));
   const [note, setNote] = useState("");
@@ -21,7 +35,7 @@ function SelectionForm() {
   }
 
   return (
-    <main className="contact">
+    <main className="contact" ref={scope}>
       <header className="page-nav">
         <Link className="brand" href="/" aria-label="На главную">К.</Link>
         <span className="page-nav__label">Личный разговор</span>
