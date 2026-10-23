@@ -1,0 +1,242 @@
+/*
+ * Editorial surface system — inspired by the restraint of Aman Residences and
+ * Fantastic Frank. The single entry point for surface, type and control color.
+ * Structural layout and responsive grids live in globals.css.
+ */
+:root {
+  --canvas: #eae5dc;
+  --warm-stone: #eae5dc;
+  --sand: #e9e3d8;
+  --surface: #f7f3ed;
+  --surface-raised: #f1ece4;
+  --night: #252b28;
+  --warm-graphite: #282b29;
+  --warm-walnut: #282b29;
+  --forest: #31483f;
+  --moss: #445b51;
+  --ink: #292e2b;
+  --ivory: #f7f3ed;
+  --champagne: #d8bc8a;
+  --muted: #d0d1cb;
+  --line: rgba(247, 243, 237, .24);
+  --line-dark: rgba(41, 46, 43, .22);
+  --label-size: clamp(15px, 1.14vw, 17px);
+  --action-size: clamp(15px, 1.12vw, 16px);
+}
+html, body { background: var(--canvas); color: var(--ink); }
+::selection { background: #c9b79c; color: var(--ink); }
+
+/* All dark surfaces belong to the same neutral family, not several greens. */
+.archive-hero { background: var(--night); color: var(--ivory); }
+.archive-hero__veil {
+  background: linear-gradient(90deg, rgba(21,28,24,.91), rgba(27,32,28,.57) 53%, rgba(27,32,28,.16)),
+              linear-gradient(0deg, rgba(21,26,22,.60), transparent 58%);
+}
+.archive-hero__caption, .archive-hero__caption a { color: var(--ivory); }
+.archive-hero__caption > span { color: var(--champagne); }
+.archive-nav a:hover { color: var(--champagne); }
+.archive-story { background: var(--warm-graphite); color: var(--ivory); }
+.archive-story__top .archive-kicker,
+.archive-story__intro em,
+.archive-story__chapter h3 em,
+.archive-story__chapter-index span:first-child { color: var(--champagne); }
+.archive-story__progress-track > span { background: var(--champagne); }
+.archive-story__end a { color: var(--ivory); border-color: var(--champagne); }
+.archive-story__end a:hover { color: var(--champagne); border-color: var(--champagne); }
+.archive-principles { background: #e4ddd2; color: var(--ink); }
+.archive-principles__heading { border-color: var(--line-dark); }
+.archive-principles__heading .archive-kicker { color: var(--forest); }
+.archive-principles__heading em { color: var(--forest); }
+.archive-principles__grid article { border-color: var(--line-dark); }
+.archive-principles__grid article:nth-child(2) { background: transparent; }
+.archive-principles__grid span { color: #77644c; }
+.archive-principles__grid p { color: #414942; }
+.archive-callout, .archive-page__outro {
+  color: var(--ivory);
+  background: var(--night);
+  border-color: var(--line);
+}
+.archive-callout h2, .archive-page__outro h2 { color: var(--ivory); }
+.archive-callout h2 em, .archive-page__outro h2 em { color: var(--champagne); }
+.archive-callout__lead { color: var(--muted); }
+
+/* Editorial linen — one color family across ALL inner pages. */
+.archive-intro { background: var(--canvas); color: var(--ink); border-color: var(--line-dark); }
+.archive-intro > .archive-kicker, .archive-intro h2 em { color: var(--forest); }
+.archive-page, .contact, .detail { color: var(--ink); background: var(--canvas); }
+.archive-page__intro h1, .contact h1 { color: var(--ink); }
+.archive-page__intro h1 em, .contact h1 em { color: var(--forest); }
+.archive-page__intro > .archive-kicker,
+.contact-story > .eyebrow { color: var(--forest); }
+.archive-page__intro > p:last-child, .contact-story__lead,
+.contact-story__aside p { color: var(--ink); }
+.contact-story__rule { background: var(--forest); }
+.selected { color: var(--ink); border-color: var(--line-dark); }
+.selected__label { color: var(--forest); }
+
+/* The same calm header on catalogue, property details and contact. */
+.page-nav, .archive-page__nav {
+  background: rgba(37,43,40,.98);
+  border-color: var(--line);
+  color: var(--ivory);
+}
+.page-nav a:not(.brand):not(.nav-cta):hover,
+.archive-page__nav a:not(.archive-brand):not(.nav-cta):hover { color: var(--champagne); }
+.mobile-menu__panel { background: var(--surface); color: var(--ink); border-color: var(--line-dark); }
+.mobile-menu__panel a { border-color: var(--line-dark); }
+.mobile-menu__panel a:hover { background: #ded7cb; color: var(--ink); }
+
+/* Button contract: all normal and hover pairs visibly contrast with the surface.
+ * Primary on light: forest -> parchment on hover, retained green border.
+ * Primary on dark: parchment -> champagne on hover.
+ * Secondary on dark: dark translucent -> parchment on hover. */
+.archive-button, .primary {
+  background: var(--ivory); color: var(--night); border-color: var(--ivory);
+}
+.archive-button:hover, .primary:hover {
+  background: var(--champagne); border-color: var(--champagne); color: var(--night);
+}
+.archive-text-link {
+  background: rgba(12,15,13,.14); border-color: rgba(247,243,237,.7); color: var(--ivory);
+}
+.archive-text-link:hover {
+  background: var(--ivory); border-color: var(--ivory); color: var(--night);
+}
+.intro-cta, .listing-copy a, .detail .primary {
+  background: var(--forest); color: var(--ivory); border-color: var(--forest);
+}
+.intro-cta:hover, .listing-copy a:hover, .detail .primary:hover {
+  background: #f7f3ed; color: var(--forest); border-color: var(--forest);
+}
+.archive-callout .archive-button, .archive-page__outro .archive-button {
+  background: var(--ivory); color: var(--night); border-color: var(--ivory);
+}
+.archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
+  background: var(--champagne); border-color: var(--champagne); color: var(--night);
+}
+.nav-cta {
+  background: transparent; border-color: rgba(247,243,237,.65); color: var(--ivory);
+}
+.nav-cta:hover, .page-nav--light .nav-cta:hover {
+  background: var(--ivory); color: var(--night); border-color: var(--ivory);
+}
+.filters button {
+  border-color: var(--line-dark);
+  color: var(--ink);
+  background: transparent;
+}
+.filters button:hover:not([aria-pressed="true"]) {
+  background: #d9d0c3; border-color: var(--forest); color: var(--ink);
+}
+.filters button[aria-pressed="true"] {
+  background: var(--forest); border-color: var(--forest); color: var(--ivory);
+}
+.filters button[aria-pressed="true"]:hover {
+  background: #425d51; border-color: #425d51; color: var(--ivory);
+}
+.archive-button, .archive-text-link, .intro-cta,
+.listing-copy a, .primary, .nav-cta, .filters button {
+  transition: background-color .23s ease, border-color .23s ease, color .23s ease;
+}
+.archive-button:focus-visible, .archive-text-link:focus-visible,
+.intro-cta:focus-visible, .listing-copy a:focus-visible, .primary:focus-visible,
+.nav-cta:focus-visible, .filters button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+/* The archive must read as one curated collection, not six different tiles.
+ * Image frames are never clipped/translated by JS; the full frame is visible. */
+.filters { border-color: var(--line-dark); }
+.filters button:focus-visible { outline-color: var(--forest); }
+legend, .filters strong { color: var(--forest); }
+.listing-grid { gap: clamp(20px, 2.5vw, 34px); }
+.listing, .listing:nth-child(even) {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-dark);
+  min-width: 0;
+  overflow: visible;
+}
+.listing-image, .listing:nth-child(even) .listing-image {
+  display: block; min-width: 0; width: 100%;
+  clip-path: none !important;
+  transform: none !important;
+  background: var(--sand);
+  align-self: stretch;
+}
+.listing-image img {
+  object-fit: contain;
+  width: 100%; height: 100%;
+  transition: transform .45s ease;
+}
+.listing-copy {
+  min-width: 0;
+  color: var(--ink);
+  align-self: center;
+}
+.listing-copy h2 { color: var(--ink); }
+.listing-copy > p:first-child, .listing-copy > span { color: var(--forest); }
+.listing-copy > p:nth-of-type(2) { color: #464c47; }
+.listing-copy a {
+  display: inline-flex; align-items: center;
+  gap: 12px; width: fit-content; min-width: 0;
+  text-align: center; white-space: nowrap;
+}
+.listing-copy a .listing-copy__action-label { line-height: 1.4; }
+.listing-copy a svg.listing-copy__arrow { display: block; flex: 0 0 20px; width: 20px; height: 20px; transform: none; }
+.empty h2 { color: var(--ink); }
+.empty h2 em, .empty button { color: var(--forest); }
+.empty button { border-color: var(--forest); }
+
+/* Personal consultation: one restrained light paper panel, not a green slab. */
+.contact-panel {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-dark);
+  box-shadow: 0 18px 48px rgba(28,31,29,.055);
+}
+.contact-panel::before { height: 1px; background: var(--line-dark); }
+.contact-panel__heading h2 { color: var(--ink); }
+.contact-panel__heading h2 em { color: var(--forest); }
+.contact-panel__heading .eyebrow, .contact form label { color: #45584b; }
+.contact input, .contact textarea {
+  color: var(--ink);
+  border-color: rgba(41,46,43,.42);
+}
+.contact input::placeholder, .contact textarea::placeholder { color: #656e67; }
+.contact input:focus-visible, .contact textarea:focus-visible {
+  border-color: var(--forest);
+  box-shadow: 0 1px 0 var(--forest);
+}
+.form-note { color: #49534c; }
+.contact-panel:focus-within { box-shadow: 0 20px 60px rgba(28,31,29,.11); }
+.contact-form__submit { background: var(--forest); color: var(--ivory); border-color: var(--forest); }
+.contact-form__submit:hover { background: var(--surface); color: var(--forest); border-color: var(--forest); }
+
+/* The detail page keeps the exact same paper/ink language. */
+.detail-grid > div {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-dark);
+}
+.detail .eyebrow, .detail dt, .detail li::before { color: var(--forest); }
+.detail h1 { color: var(--ink); }
+.detail dl, .detail ul { border-color: var(--line-dark); }
+.detail figure { background: var(--sand); border: 1px solid var(--line-dark); }
+.detail figure::after { border-color: rgba(41,46,43,.18); }
+.detail figcaption { color: var(--ink); }
+.detail-lead, .detail li { color: #464c47; }
+
+/* Quiet fixed-format framing: view transitions stay restrained. */
+@media (max-width: 720px) {
+  .listing-copy a { width: 100%; white-space: normal; }
+  .listing, .listing:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+  .listing:nth-child(even) .listing-image { order: 0; }
+  .listing-image { min-height: 0; aspect-ratio: 4 / 3; }
+  .detail-grid > div { padding: 28px 22px; }
+  .contact-panel { padding: 30px 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .listing-image img { transition: none; }
+}
