@@ -42,6 +42,23 @@ try {
     assert.deepEqual(errors, [], `JS exceptions on ${width}px`);
     await page.close();
   }
+  // Motion-enabled pass: assert the new desktop scene actually changes as we scroll.
+  const motionPage = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
+  const motionErrors = [];
+  motionPage.on("pageerror", (error) => motionErrors.push(error.message));
+  await motionPage.goto(origin + "/", { waitUntil: "networkidle" });
+  await motionPage.waitForTimeout(350);
+  const second = motionPage.locator("[data-story-beat]").nth(1);
+  const y = await second.evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
+  await motionPage.evaluate((target) => window.scrollTo({ top: target - 310, behavior: "instant" }), y);
+  await motionPage.waitForTimeout(1400);
+  const chapter = await motionPage.locator(".archive-story").getAttribute("data-chapter");
+  const drawingOpacity = await motionPage.locator("[data-story-plan]").evaluate((el) => getComputedStyle(el).opacity);
+  console.log("MOTION SCENE", JSON.stringify({ chapter, drawingOpacity }));
+  assert.equal(chapter, "2", "Scroll scene did not advance to second chapter");
+  assert.ok(Number(drawingOpacity) > 0.8, "Floorplan reveal did not occur");
+  assert.deepEqual(motionErrors, [], "Motion-enabled page exceptions");
+  await motionPage.close();
 } finally {
   await browser.close();
 }
