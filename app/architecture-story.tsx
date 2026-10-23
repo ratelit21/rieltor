@@ -143,7 +143,6 @@ export default function ArchitectureStory() {
             <div className="archive-story__wash" />
             <div className="archive-story__plan" data-story-plan>
               <img src={`${base}/images/plan-river-formatted.webp`} alt="" width="720" height="720" loading="eager" fetchPriority="low" decoding="async" />
-              <span>Планировка · эскиз</span>
             </div>
             <span className="archive-story__vertical">Личная коллекция / Уфа</span>
             <span className="archive-story__scan">Архитектура повседневности</span>
