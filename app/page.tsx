@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowDown } from "lucide-react";
 import { ViewTransition } from "react";
 import HomeMotion from "./home-motion";
 import MobileMenu from "./mobile-menu";
@@ -14,7 +15,7 @@ export default function Home() {
         <div className="archive-hero__veil" aria-hidden="true" />
         <header className="archive-nav" data-hero-enter><Link className="archive-brand" href="/" aria-label="На главную">К.</Link><p>Личная подборка<br />новостроек Уфы</p><nav aria-label="Основная навигация"><Link href="/kvartiry">Подборка</Link><Link href="/podbor">Написать</Link></nav><MobileMenu /></header>
         <div className="archive-hero__copy" data-hero-enter><p className="archive-kicker">Выбор без витрины</p><h1 id="hero-title">Не просто<br /><em>новая квартира.</em></h1><p className="archive-hero__lead">Собираю новостройки, в которых есть смысл жить: разбираю планировки, условия и нюансы до того, как вы примете решение.</p><div className="archive-actions"><Link className="archive-button" href="/kvartiry">Открыть подборку</Link><Link className="archive-text-link" href="/podbor">Обсудить свой запрос</Link></div></div>
-        <div className="archive-hero__caption" data-hero-enter><span>Точка зрения</span><p>Тот самый дом начинается<br />с ясного выбора.</p><a href="#vzglyad">Смотреть историю <span aria-hidden="true">↓</span></a></div><p className="archive-demo-note" data-hero-enter>Демонстрационная версия · предложения — примеры оформления</p>
+        <div className="archive-hero__caption" data-hero-enter><span>Точка зрения</span><p>Тот самый дом начинается<br />с ясного выбора.</p><a href="#vzglyad">Смотреть историю <ArrowDown aria-hidden="true" className="archive-hero__caption-arrow" strokeWidth={1.6} /></a></div><p className="archive-demo-note" data-hero-enter>Демонстрационная версия · предложения — примеры оформления</p>
       </section>
       <section className="archive-intro" aria-labelledby="intro-title"><p className="archive-kicker">Как устроен подбор</p><h2 id="intro-title">Сначала <em>суть</em>,<br />потом метры.</h2><div className="archive-intro__body"><p>Не отправляю длинные списки. Отбираю варианты, объясняю, чем они отличаются, и остаюсь рядом до ключей.</p><Link className="intro-cta" href="/kvartiry">Смотреть текущую подборку</Link></div></section>
       <ArchitectureStory />

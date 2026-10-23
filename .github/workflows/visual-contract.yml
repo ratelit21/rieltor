@@ -1,0 +1,29 @@
+name: Visual Contract
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  browser-qa:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BASE_PATH: /rieltor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Verify responsive pages, filters, contrast, icons and scroll story
+        run: |
+          google-chrome --version
+          mkdir -p /tmp/rieltor-preview/rieltor
+          cp -a out/. /tmp/rieltor-preview/rieltor/
+          python3 -m http.server 4173 --directory /tmp/rieltor-preview &
+          sleep 2
+          node scripts/verify-visual-contract.mjs

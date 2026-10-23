@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
@@ -64,17 +65,21 @@ export default function ArchitectureStory() {
           duration: 0.72, ease: "power2.out", overwrite: true,
         });
 
-        // The plan is content, not a slow transition. Make it available immediately
-        // when chapter 02 is active, including when scrolling very quickly.
+        // Crossfade the preloaded floor plan on the same architectural stage.
+        // Only opacity changes: no scale, jump or floating card effect.
         gsap.killTweensOf(blueprint);
-        gsap.set(blueprint, {
-          autoAlpha: index === 1 ? 1 : 0,
-          scale: index === 1 ? 0.985 : 1,
-          y: index === 1 ? 8 : 0,
+        if (index === 1) gsap.set(blueprint, { visibility: "visible" });
+        gsap.to(blueprint, {
+          opacity: index === 1 ? 1 : 0,
+          duration: 0.42,
+          ease: "power1.inOut",
+          overwrite: true,
+          onComplete: () => {
+            if (index !== 1 && root.dataset.chapter !== "2") {
+              gsap.set(blueprint, { visibility: "hidden" });
+            }
+          },
         });
-        if (index === 1) {
-          gsap.to(blueprint, { scale: 1, y: 0, duration: 0.34, ease: "power2.out" });
-        }
       };
 
       // One viewport-based state calculation prevents chapter callbacks being
@@ -156,7 +161,7 @@ export default function ArchitectureStory() {
       </div>
       <div className="archive-story__end">
         <span>В каждой детали — смысл.</span>
-        <Link href="/kvartiry">Перейти к подборке <span aria-hidden="true">↗</span></Link>
+        <Link href="/kvartiry">Перейти к подборке <ArrowUpRight aria-hidden="true" className="archive-story__end-arrow" strokeWidth={1.6} /></Link>
       </div>
     </section>
   );
