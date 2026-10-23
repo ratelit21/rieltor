@@ -1,6 +1,9 @@
  :root{--paper:#f1eadf;--paper-deep:#e4d8c8;--ink:#281b1c;--wine:#4b0c1c;--wine-dark:#24030c;--rose:#b76d69;--metal:#8e8378;--line:rgba(40,27,28,.18);--serif:Georgia,"Times New Roman",serif;--sans:Arial,Helvetica,sans-serif}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:var(--paper)}
+html:has(.archive-home){background:var(--paper-deep)}
+html:has(.archive-page){background:var(--wine)}
+html:has(.archive-contact){background:var(--wine-dark)}
 body{margin:0;min-width:320px;background:var(--paper);color:var(--ink);font-family:var(--sans)}
 a{color:inherit;text-decoration:none}
 button,input,textarea{font:inherit}
