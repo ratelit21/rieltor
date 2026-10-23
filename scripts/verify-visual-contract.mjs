@@ -156,10 +156,7 @@ try {
         }
       }
       console.log("PASS",width,route,JSON.stringify(props));
-      if(width===1440) {
-        const buffer=await page.screenshot({type:"jpeg",quality:35});
-        console.log("REVIEW_IMAGE|"+route+"|"+buffer.toString("base64"));
-      }
+
 
     }
     assert.deepEqual(errors,[]);
