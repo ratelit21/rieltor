@@ -97,7 +97,7 @@ export default function ArchitectureStory() {
     <section className="archive-story" id="vzglyad" ref={sectionRef} aria-labelledby="story-title" data-chapter="1">
       <div className="archive-story__top">
         <p className="archive-kicker">Другой взгляд на квартиру</p>
-        <p className="archive-story__intro" id="story-title">За каждым удачным выбором стоит <em>внимание к деталям.</em></p>
+        <h2 className="archive-story__intro" id="story-title">За каждым удачным выбором стоит <em>внимание к деталям.</em></h2>
       </div>
 
       <div className="archive-story__layout">
@@ -108,7 +108,7 @@ export default function ArchitectureStory() {
                 <span>{chapter.number}</span>
                 <span>{chapter.label}</span>
               </div>
-              <h2>{chapter.heading}</h2>
+              <h3>{chapter.heading}</h3>
               <p>{chapter.text}</p>
             </article>
           ))}
