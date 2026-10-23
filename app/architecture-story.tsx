@@ -127,8 +127,6 @@ export default function ArchitectureStory() {
               <img src={`${base}/images/plan-river-formatted.webp`} alt="" width="720" height="720" loading="lazy" decoding="async" />
               <span>Планировка · эскиз</span>
             </div>
-            <div className="archive-story__corner archive-story__corner--tl" />
-            <div className="archive-story__corner archive-story__corner--br" />
             <span className="archive-story__vertical">Личная коллекция / Уфа</span>
             <span className="archive-story__scan">Архитектура повседневности</span>
           </div>
