@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 
-const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
+const browser = await chromium.launch({ headless: true, channel: "chrome", args: ["--no-sandbox"] });
 const origin = "http://127.0.0.1:4173/rieltor";
 const widths = [390, 768, 1440];
 const paths = ["/", "/kvartiry/", "/kvartiry/pervyy-svet/", "/podbor/"];
