@@ -20,3 +20,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: |
+          mkdir -p /tmp/cinematic-preview/rieltor
+          cp -a out/. /tmp/cinematic-preview/rieltor/
+          python3 -m http.server 4173 --directory /tmp/cinematic-preview &
+          sleep 2
+          node scripts/cinematic-smoke.mjs
