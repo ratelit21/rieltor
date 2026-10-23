@@ -12,7 +12,7 @@
   --section-space: clamp(68px, 7.5vw, 116px);
   --control-height: 52px;
   --label-size: 14px;
-  --action-size: 13px;
+  --action-size: 14px;
 }
 
 * { box-sizing: border-box; }
