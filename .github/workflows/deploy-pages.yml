@@ -16,6 +16,8 @@ concurrency:
 
 jobs:
   deploy:
+    env:
+      NEXT_PUBLIC_BASE_PATH: /rieltor
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

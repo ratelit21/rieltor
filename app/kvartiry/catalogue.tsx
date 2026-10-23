@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 
-const imageBasePath = process.env.GITHUB_ACTIONS === "true" ? "/rieltor" : "";
+const imageBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 type RoomFilter = "all" | "studio" | "one" | "two" | "three";
 type AreaFilter = "all" | "compact" | "middle" | "large";
