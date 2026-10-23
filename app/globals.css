@@ -411,6 +411,11 @@ legend { margin-bottom: 12px; color: var(--forest); font-size: 10px; letter-spac
 @keyframes site-leave { to { opacity: 0; } }
 @keyframes site-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
+@media (max-width: 980px) {
+  .contact-frame { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .contact-story__aside { margin-top: 32px; }
+  .contact-panel { max-width: 720px; }
+}
 @media (max-width: 900px) {
   .archive-intro { column-gap: 36px; }
   .filters { grid-template-columns: 1fr 1fr; }
