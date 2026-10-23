@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
@@ -156,7 +157,7 @@ export default function ArchitectureStory() {
       </div>
       <div className="archive-story__end">
         <span>В каждой детали — смысл.</span>
-        <Link href="/kvartiry">Перейти к подборке <span aria-hidden="true">↗</span></Link>
+        <Link href="/kvartiry">Перейти к подборке <ArrowUpRight aria-hidden="true" className="archive-story__end-arrow" strokeWidth={1.6} /></Link>
       </div>
     </section>
   );
