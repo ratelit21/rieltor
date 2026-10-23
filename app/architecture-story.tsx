@@ -54,39 +54,57 @@ export default function ArchitectureStory() {
         root.dataset.chapter = String(index + 1);
         counter.textContent = `0${index + 1} / 03`;
 
-        gsap.to(progress, { scaleX: (index + 1) / 3, duration: 0.85, ease: "power3.inOut", overwrite: true });
+        gsap.to(progress, {
+          scaleX: (index + 1) / 3, duration: 0.28, ease: "power2.out", overwrite: true,
+        });
         gsap.to(picture, {
           xPercent: [0, -5, 4][index],
           yPercent: [0, 3, -2][index],
           scale: [1.09, 1.22, 1.13][index],
-          duration: 1.55,
-          ease: "power3.inOut",
-          overwrite: true,
+          duration: 0.72, ease: "power2.out", overwrite: true,
         });
-        gsap.to(blueprint, {
+
+        // The plan is content, not a slow transition. Make it available immediately
+        // when chapter 02 is active, including when scrolling very quickly.
+        gsap.killTweensOf(blueprint);
+        gsap.set(blueprint, {
           autoAlpha: index === 1 ? 1 : 0,
-          scale: index === 1 ? 1 : 0.93,
-          y: index === 1 ? 0 : 24,
-          duration: 1.05,
-          ease: "power3.inOut",
-          overwrite: true,
+          scale: index === 1 ? 0.985 : 1,
+          y: index === 1 ? 8 : 0,
         });
+        if (index === 1) {
+          gsap.to(blueprint, { scale: 1, y: 0, duration: 0.34, ease: "power2.out" });
+        }
       };
 
-      show(0);
+      // One viewport-based state calculation prevents chapter callbacks being
+      // missed when users fling, skip scroll distances or land on an anchor.
+      const sync = () => {
+        const readingLine = window.innerHeight * 0.55;
+        let index = 0;
+        beats.forEach((beat, i) => {
+          if (beat.getBoundingClientRect().top <= readingLine) index = i;
+        });
+        show(index);
+      };
 
-      const triggers = beats.map((beat, index) =>
-        ScrollTrigger.create({
-          trigger: beat,
-          start: "top 57%",
-          end: "bottom 46%",
-          onEnter: () => show(index),
-          onEnterBack: () => show(index),
-        }),
-      );
+      const trigger = ScrollTrigger.create({
+        trigger: root,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: sync,
+        onEnterBack: sync,
+        onUpdate: sync,
+        onRefresh: sync,
+      });
+      sync();
+
       return () => {
-        triggers.forEach((trigger) => trigger.kill());
+        trigger.kill();
+        gsap.killTweensOf([picture, blueprint, progress]);
         gsap.set([picture, blueprint, progress], { clearProps: "all" });
+        root.dataset.chapter = "1";
+        counter.textContent = "01 / 03";
       };
     });
 
@@ -124,8 +142,7 @@ export default function ArchitectureStory() {
             </div>
             <div className="archive-story__wash" />
             <div className="archive-story__plan" data-story-plan>
-              <img src={`${base}/images/plan-river-formatted.webp`} alt="" width="720" height="720" loading="lazy" decoding="async" />
-              <span>Планировка · эскиз</span>
+              <img src={`${base}/images/plan-river-formatted.webp`} alt="" width="720" height="720" loading="eager" fetchPriority="low" decoding="async" />
             </div>
             <span className="archive-story__vertical">Личная коллекция / Уфа</span>
             <span className="archive-story__scan">Архитектура повседневности</span>
