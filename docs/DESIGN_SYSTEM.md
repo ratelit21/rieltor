@@ -31,7 +31,7 @@
 
 ## Чеклист до слияния в main
 
-1. `npm ci && npm run build` — успешно.
+1. GitHub Actions **Visual Contract** (`.github/workflows/visual-contract.yml`) — успешен: включает Next.js build и браузерные проверки. Script: `scripts/verify-visual-contract.mjs`.
 2. В Chrome проверить 390, 768, 1440 px без горизонтального переполнения.
 3. Визуально сравнить главную, каталог, карточку и форму на одинаковом разрешении.
 4. Проверить мобильное меню и фильтры; стрелки отрисованы как SVG и находятся на линии текста.
