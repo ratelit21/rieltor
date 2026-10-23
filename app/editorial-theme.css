@@ -106,7 +106,7 @@ html, body { background: var(--canvas); color: var(--ink); }
   background: var(--forest); color: var(--ivory); border-color: var(--forest);
 }
 .intro-cta:hover, .listing-copy a:hover, .detail .primary:hover {
-  background: #f7f3ed; color: var(--forest); border-color: var(--forest);
+  background: #ddd3c4; color: var(--forest); border-color: var(--forest);
 }
 .archive-callout .archive-button, .archive-page__outro .archive-button {
   background: var(--ivory); color: var(--night); border-color: var(--ivory);
@@ -212,7 +212,7 @@ legend, .filters strong { color: var(--forest); }
 .form-note { color: #49534c; }
 .contact-panel:focus-within { box-shadow: 0 20px 60px rgba(28,31,29,.11); }
 .contact-form__submit { background: var(--forest); color: var(--ivory); border-color: var(--forest); }
-.contact-form__submit:hover { background: var(--surface); color: var(--forest); border-color: var(--forest); }
+.contact-form__submit:hover { background: #ddd3c4; color: var(--forest); border-color: var(--forest); }
 
 /* The detail page keeps the exact same paper/ink language. */
 .detail-grid > div {
