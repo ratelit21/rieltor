@@ -3,13 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useMemo, useState } from "react";
 import { apartments, roomLabel } from "../apartments";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const roomsOptions = [
   ["all", "Все"], ["0", "Студия"], ["1", "1 комната"],
@@ -21,7 +16,6 @@ const areaOptions = [
 ] as const;
 
 export default function Catalogue() {
-  const root = useRef<HTMLElement>(null);
   const [rooms, setRooms] = useState("all");
   const [area, setArea] = useState("all");
   const filtered = useMemo(() => apartments.filter((item) => {
@@ -31,33 +25,9 @@ export default function Catalogue() {
     return roomMatch && areaMatch;
   }), [rooms, area]);
 
-  useGSAP(() => {
-    const container = root.current;
-    if (!container) return;
-    const media = gsap.matchMedia();
-    media.add("(min-width: 901px) and (prefers-reduced-motion: no-preference)", () => {
-      const cards = gsap.utils.toArray<HTMLElement>("[data-listing]", container);
-      for (const card of cards) {
-        const frame = card.querySelector<HTMLElement>(".listing-image");
-        const copy = card.querySelector<HTMLElement>(".listing-copy");
-        if (!frame || !copy) continue;
-        gsap.fromTo(frame,
-          { clipPath: "inset(0 8% 0 8%)", y: 28 },
-          { clipPath: "inset(0 0% 0 0%)", y: 0, duration: 1.25, ease: "power3.out",
-            scrollTrigger: { trigger: card, start: "top 88%", once: true } },
-        );
-        gsap.fromTo(copy, { y: 20, opacity: 0.65 },
-          { y: 0, opacity: 1, duration: 1, ease: "power2.out",
-            scrollTrigger: { trigger: card, start: "top 84%", once: true } },
-        );
-      }
-      ScrollTrigger.refresh();
-    });
-    return () => media.revert();
-  }, { scope: root, dependencies: [rooms, area], revertOnUpdate: true });
 
   return (
-    <section className="catalogue" ref={root} aria-label="Каталог демонстрационных квартир">
+    <section className="catalogue" aria-label="Каталог демонстрационных квартир">
       <div className="filters">
         <fieldset><legend>Комнатность</legend>
           {roomsOptions.map(([value, label]) =>
