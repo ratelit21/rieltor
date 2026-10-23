@@ -16,7 +16,17 @@ export default function Home() {
         <div className="archive-hero__caption" data-hero-enter><span>01—</span><p>Тот самый дом начинается<br />с ясного выбора.</p></div><p className="archive-demo-note" data-hero-enter>Демонстрационная версия · предложения — примеры оформления</p>
       </section>
       <section className="archive-intro" aria-labelledby="intro-title"><p className="archive-kicker">Как устроен подбор</p><h2 id="intro-title">Сначала <em>суть</em>,<br />потом метры.</h2><div className="archive-intro__body"><p>Не отправляю длинные списки. Отбираю варианты, объясняю, чем они отличаются, и остаюсь рядом до ключей.</p><Link className="intro-cta" href="/kvartiry">Смотреть текущую подборку</Link></div></section>
-      <section className="archive-principles" aria-label="Принципы работы"><article><span>01</span><h3>Планировка<br />в масштабе жизни</h3><p>Смотрим не на рекламную схему, а на свет, хранение и ежедневные сценарии.</p></article><article><span>02</span><h3>Спокойный<br />разговор</h3><p>Можно задать любой вопрос и не торопиться с решением.</p></article><article><span>03</span><h3>Один человек<br />на связи</h3><p>От первого варианта до договора — без переводов между отделами.</p></article></section>
+      <section className="archive-principles" aria-labelledby="principles-title">
+        <div className="archive-principles__heading">
+          <p className="archive-kicker">Три принципа работы</p>
+          <h2 id="principles-title">Детали, <em>которые решают.</em></h2>
+        </div>
+        <div className="archive-principles__grid">
+          <article><span aria-hidden="true">01</span><h3>Планировка<br />в масштабе жизни</h3><p>Смотрим не на рекламную схему, а на свет, хранение и ежедневные сценарии.</p></article>
+          <article><span aria-hidden="true">02</span><h3>Спокойный<br />разговор</h3><p>Можно задать любой вопрос и не торопиться с решением.</p></article>
+          <article><span aria-hidden="true">03</span><h3>Один человек<br />на связи</h3><p>От первого варианта до договора — без переводов между отделами.</p></article>
+        </div>
+      </section>
       <section className="archive-callout"><p className="archive-kicker">Если в подборке нет своего</p><h2>Расскажите,<br /><em>что должно совпасть.</em></h2><Link className="archive-button archive-button--dark" href="/podbor">Написать риелтору</Link></section>
     </HomeMotion></ViewTransition>
   );
