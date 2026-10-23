@@ -160,8 +160,8 @@ legend, .filters strong { color: var(--forest); }
 }
 .listing-image, .listing:nth-child(even) .listing-image {
   display: block; min-width: 0; width: 100%;
-  clip-path: none !important;
-  transform: none !important;
+  clip-path: none;
+  transform: none;
   background: var(--sand);
   align-self: stretch;
 }
