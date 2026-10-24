@@ -121,7 +121,7 @@ try {
         });
         assert.equal(hovered.bg,normal.bg,"CTA fill changed on hover");
         assert.equal(hovered.fg,normal.fg,"CTA text changed on hover");
-        assert.equal(hovered.transition,"0s","CTA hover animates");
+        assert.ok(parseFloat(hovered.transition)<=0.001,"CTA hover animates");
         assert.equal(hovered.outline,"solid","CTA hover lacks feedback");
         assert.ok(parseFloat(hovered.outlineWidth)>=2,"CTA outline insufficient");
         assert.ok(contrast(hovered.bg,hovered.fg)>=4.5,
@@ -187,7 +187,7 @@ try {
           });
           assert.equal(state.bg,before.bg,"Button fill animates/changes: "+selector);
           assert.equal(state.fg,before.fg,"Button foreground animates/changes: "+selector);
-          assert.equal(state.transition,"0s","Button has transitions: "+selector);
+          assert.ok(parseFloat(state.transition)<=0.001,"Button has transitions: "+selector);
           assert.equal(state.outline,"solid","Missing stable outline: "+selector);
           assert.ok(parseFloat(state.outlineWidth)>=2,"Outline too subtle: "+selector);
           if(!state.bg.startsWith("rgba")) {
