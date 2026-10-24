@@ -35,6 +35,10 @@ try {
         assert.ok(contrast(colors.story,colors.storyText)>=4.5,"story low contrast");
         assert.notEqual(colors.intro,colors.story,"sections not materially contrasted");
         assert.equal(await page.locator(".archive-story__end-arrow").count(),1);
+        const principles=await page.locator(".archive-principles").evaluate(el=>getComputedStyle(el).backgroundColor);
+        assert.equal(principles,colors.intro,"Principles and introduction must share the warm-stone material");
+        const heroAction=await page.locator(".archive-actions .archive-button").evaluate(el=>getComputedStyle(el).backgroundColor);
+        assert.notEqual(heroAction,"rgb(247, 243, 237)","No white/porcelain button fills");
         console.log("COLORS",width,JSON.stringify(colors));
       }
       if(route==="/kvartiry/"){
@@ -76,6 +80,11 @@ try {
             "Listing "+(i+1)+" isn't full width: "+JSON.stringify(card));
           assert.ok(card.imageLoaded,"Listing "+(i+1)+" plan did not load");
         }
+        const widths=cards.map(card=>card.frame);
+        assert.ok(Math.max(...widths)-Math.min(...widths)<=2,
+          "Every listing must have the same full-width image frame: "+JSON.stringify(widths));
+        const listingColors=await page.locator(".listing").evaluateAll(nodes=>nodes.map(el=>getComputedStyle(el).backgroundColor));
+        assert.equal(new Set(listingColors).size,1,"All archive listings use one editorial surface");
         console.log("FULL CARDS",width,JSON.stringify(cards.map(x=>Math.round(x.frame))));
         const align=await page.locator(".listing-copy a").first().evaluate(el=>{
           const a=el.querySelector(".listing-copy__action-label").getBoundingClientRect();
@@ -110,6 +119,11 @@ try {
           panel:getComputedStyle(document.querySelector(".contact-panel")).backgroundColor,
         }));
         assert.ok(contrast(color.bg,color.fg)>=4.5,"contact low contrast");
+        const colorToken=await page.evaluate(name=>getComputedStyle(document.documentElement).getPropertyValue(name).trim(),"--champagne");
+        const toRGB=hex=>"rgb("+[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)).join(", ")+")";
+        assert.equal(color.panel,toRGB(colorToken),"Contact application sheet must use champagne");
+        const submitBg=await page.locator(".contact-form__submit").evaluate(el=>getComputedStyle(el).backgroundColor);
+        assert.ok(contrast(color.panel,submitBg)>=4.5,"Submit button must stand out against champagne form");
         await page.locator('input[name="name"]').fill("Проверка");
         await page.locator('input[name="contact"]').fill("@test");
         await page.getByRole("button",{name:"Проверить запрос"}).click();
@@ -123,6 +137,8 @@ try {
           plan:getComputedStyle(document.querySelector(".detail figure")).backgroundColor,
         }));
         assert.notEqual(color.bg,color.panel);
+        const after=await page.locator(".detail figure").evaluate(el=>getComputedStyle(el,"::after").content);
+        assert.equal(after,"none","No duplicate decorative framing over plans");
         console.log("DETAIL",width,JSON.stringify(color));
       }
       if(width===390&&route==="/"){
