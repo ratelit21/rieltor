@@ -74,6 +74,18 @@ html, body { background: var(--canvas); color: var(--ink); }
 .selected { color: var(--ink); border-color: var(--line-dark); }
 .selected__label { color: var(--forest); }
 
+/* A focused charcoal editorial opening for the archive, then warm linen filters. */
+.archive-page__intro {
+  max-width: none;
+  background: var(--night);
+  color: var(--ivory);
+  border-bottom: 1px solid var(--line);
+}
+.archive-page__intro h1 { color: var(--ivory); }
+.archive-page__intro h1 em { color: var(--champagne); }
+.archive-page__intro > .archive-kicker { color: var(--champagne); }
+.archive-page__intro > p:last-child { color: var(--ivory); }
+
 /* The same calm header on catalogue, property details and contact. */
 .page-nav, .archive-page__nav {
   background: rgba(37,43,40,.98);
@@ -203,7 +215,30 @@ legend, .filters strong { color: var(--forest); }
 .empty h2 em, .empty button { color: var(--forest); }
 .empty button { border-color: var(--forest); }
 
-/* Personal consultation: one restrained light paper panel, not a green slab. */
+/* Two darker editorial entries among six linen cards: restraint, not a checkerboard. */
+.listing:nth-child(3n+2) {
+  background: var(--night);
+  border-color: var(--night);
+}
+.listing:nth-child(3n+2) .listing-copy { color: var(--ivory); }
+.listing:nth-child(3n+2) .listing-copy h2,
+.listing:nth-child(3n+2) .listing-copy > p:nth-of-type(2) { color: var(--ivory); }
+.listing:nth-child(3n+2) .listing-copy > p:first-child,
+.listing:nth-child(3n+2) .listing-copy > span { color: var(--champagne); }
+.listing:nth-child(3n+2) .listing-copy a {
+  background: var(--ivory);
+  border-color: var(--ivory);
+  color: var(--night);
+}
+.listing:nth-child(3n+2) .listing-copy a:hover {
+  background: var(--ivory);
+  color: var(--night);
+  border-color: var(--ivory);
+  outline: 2px solid var(--champagne);
+  outline-offset: 3px;
+}
+
+/* Personal consultation: charcoal form over a warm linen canvas. */
 .contact-panel {
   background: var(--night);
   color: var(--ivory);
