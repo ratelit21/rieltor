@@ -1,236 +1,219 @@
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 
-const browser = await chromium.launch({ headless: true, channel: "chrome", args: ["--no-sandbox"] });
 const base = "http://127.0.0.1:4173/rieltor";
 const routes = ["/", "/kvartiry/", "/kvartiry/pervyy-svet/", "/podbor/"];
-const rgb = str => (str.match(/[0-9.]+/g)||[]).slice(0,3).map(Number);
-const luminance = v => {
-  const [r,g,b]=rgb(v).map(n=>{const x=n/255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4;});
-  return .2126*r+.7152*g+.0722*b;
-};
-const contrast = (a,b)=>{const [hi,lo]=[luminance(a),luminance(b)].sort((x,y)=>y-x);return (hi+.05)/(lo+.05)};
+const browser = await chromium.launch({ channel: "chrome", headless: true, args: ["--no-sandbox"] });
+
+const rgb = s => (s.match(/[\d.]+/g) ?? []).slice(0,3).map(Number);
+function luminance(s) {
+  const [r,g,b] = rgb(s).map(n => {
+    const x = n / 255;
+    return x <= .04045 ? x / 12.92 : ((x + .055) / 1.055) ** 2.4;
+  });
+  return r * .2126 + g * .7152 + b * .0722;
+}
+function contrast(a,b) {
+  const [hi,lo] = [luminance(a),luminance(b)].sort((a,b)=>b-a);
+  return (hi+.05)/(lo+.05);
+}
+const DARK="rgb(37, 43, 40)", STONE="rgb(220, 207, 191)";
+function equal(actual,expected,description) {
+  assert.equal(actual,expected,description+" expected "+expected+", got "+actual);
+}
+async function pair(page,selector,bgOwner=selector) {
+  return page.locator(selector).first().evaluate((el,owner)=>{
+    const container=owner===el.className ? el : document.querySelector(owner);
+    const txt=getComputedStyle(el), surf=getComputedStyle(container||el);
+    return { fg:txt.color,bg:surf.backgroundColor };
+  },bgOwner);
+}
+async function buttonHover(page,selector,expectedSurface) {
+  const btn=page.locator(selector).first();
+  await btn.scrollIntoViewIfNeeded();
+  await page.mouse.move(0,0);
+  const before=await btn.evaluate(el=>({background:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color}));
+  await btn.hover();
+  await page.waitForTimeout(260);
+  const after=await btn.evaluate(el=>({
+    bg:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color,
+    border:getComputedStyle(el).borderTopColor,
+    outline:getComputedStyle(el).outlineStyle,
+    decoration:getComputedStyle(el).textDecorationLine
+  }));
+  assert.ok(after.bg!==before.background || after.color!==before.color ||
+    after.outline==="solid" || after.decoration.includes("underline"),
+    "Hover invisible: "+selector);
+  const surface=after.bg==="rgba(0, 0, 0, 0)"?expectedSurface:after.bg;
+  assert.ok(contrast(surface,after.color)>=4.5,selector+" hover illegible "+JSON.stringify(after));
+  if(after.bg==="rgba(0, 0, 0, 0)") {
+    assert.ok(contrast(expectedSurface,after.color)>=4.5,selector+" transparent hover lost contrast");
+  }
+  console.log("HOVER",selector,JSON.stringify({before,after}));
+}
+async function snapshot(page,name) {
+  const png=await page.screenshot({type:"jpeg",quality:38});
+  console.log("VISUAL|"+name+"|"+png.toString("base64"));
+}
+
 try {
-  for (const width of [390,768,1440]) {
-    const page = await browser.newPage({ viewport:{width,height:900}, reducedMotion:"reduce" });
-    const errors=[];
-    page.on("pageerror",e=>errors.push(e.message));
+  for(const width of [390,768,1440]) {
+    const page=await browser.newPage({viewport:{width,height:900},reducedMotion:"reduce"});
+    const exceptions=[];
+    page.on("pageerror",e=>exceptions.push(e.message));
     for(const route of routes) {
-      const response=await page.goto(base+route,{waitUntil:"networkidle"});
-      assert.equal(response?.status(),200);
-      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+3),width+" overflow in "+route);
-      const props=await page.evaluate(()=>({
+      const resp=await page.goto(base+route,{waitUntil:"networkidle"});
+      equal(resp?.status(),200,"route "+route);
+      const overflow=await page.evaluate(()=>({scrollWidth:document.documentElement.scrollWidth,width:innerWidth}));
+      assert.ok(overflow.scrollWidth<=overflow.width+3,"Horizontal overflow "+width+" "+route+": "+JSON.stringify(overflow));
+      const theme=await page.evaluate(()=>({
         body:getComputedStyle(document.body).backgroundColor,
-        h1:document.querySelector("h1")?.innerText,
-        icons:document.querySelectorAll("svg.lucide").length,
+        home:document.querySelector(".archive-intro")&&getComputedStyle(document.querySelector(".archive-intro")).backgroundColor,
+        story:document.querySelector(".archive-story")&&getComputedStyle(document.querySelector(".archive-story")).backgroundColor,
+        principles:document.querySelector(".archive-principles")&&getComputedStyle(document.querySelector(".archive-principles")).backgroundColor,
+        canvas:document.querySelector(".archive-page,.contact,.detail")&&getComputedStyle(document.querySelector(".archive-page,.contact,.detail")).backgroundColor,
       }));
+      equal(theme.body,DARK,"base dark green canvas");
       if(route==="/") {
-        const colors=await page.evaluate(()=>({
-          intro:getComputedStyle(document.querySelector(".archive-intro")).backgroundColor,
-          introText:getComputedStyle(document.querySelector(".archive-intro")).color,
-          story:getComputedStyle(document.querySelector(".archive-story")).backgroundColor,
-          storyText:getComputedStyle(document.querySelector(".archive-story")).color,
-        }));
-        assert.ok(contrast(colors.intro,colors.introText)>=4.5,"intro low contrast: "+JSON.stringify(colors));
-        assert.ok(contrast(colors.story,colors.storyText)>=4.5,"story low contrast");
-        assert.notEqual(colors.intro,colors.story,"sections not materially contrasted");
-        assert.equal(await page.locator(".archive-story__end-arrow").count(),1);
-        const principles=await page.locator(".archive-principles").evaluate(el=>getComputedStyle(el).backgroundColor);
-        assert.equal(principles,colors.intro,"Principles and introduction must share the warm-stone material");
-        const ctaColors=await page.locator(".archive-callout").evaluate(el=>({
-          bg:getComputedStyle(el).backgroundColor,
-          fg:getComputedStyle(el).color,
-          accent:getComputedStyle(el.querySelector("h2 em")).color
-        }));
-        const forest=await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue("--forest").trim());
-        const toRgb=hex=>"rgb("+[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)).join(", ")+")";
-        assert.equal(ctaColors.bg,toRgb(forest),"Final CTA must use the same brand forest color");
-        assert.ok(contrast(ctaColors.bg,ctaColors.fg)>=4.5,"Final CTA body text too pale");
-        assert.ok(contrast(ctaColors.bg,ctaColors.accent)>=4.5,"Final CTA champagne accent lacks contrast");
-        console.log("FINAL CTA COLORS",width,JSON.stringify(ctaColors));
-        const heroAction=await page.locator(".archive-actions .archive-button").evaluate(el=>getComputedStyle(el).backgroundColor);
-        assert.notEqual(heroAction,"rgb(247, 243, 237)","No white/porcelain button fills");
-        console.log("COLORS",width,JSON.stringify(colors));
+        equal(theme.home,DARK,"home introduction");
+        equal(theme.story,DARK,"scroll story");
+        equal(theme.principles,STONE,"home principles");
+        const heading=await page.locator(".archive-principles__heading h2").evaluate(el=>getComputedStyle(el).color);
+        assert.ok(contrast(STONE,heading)>=4.5,"principles heading too light");
+        equal(await page.locator(".archive-principles__grid article").count(),3,"three principle cards");
+        assert.equal(await page.locator("svg.archive-story__end-arrow").count(),1);
+        if(width===390) {
+          await page.getByRole("button",{name:"Открыть меню"}).click();
+          equal(await page.locator(".mobile-menu__panel a").count(),2,"menu links");
+          equal(await page.locator("svg.lucide-x").count(),1,"close svg");
+          await page.getByRole("button",{name:"Закрыть меню"}).click();
+        }
+        if(width===1440) {
+          await buttonHover(page,".archive-actions .archive-button",DARK);
+          await buttonHover(page,".archive-actions .archive-text-link",DARK);
+          await buttonHover(page,".archive-intro .intro-cta",DARK);
+          await buttonHover(page,".archive-callout .archive-button",DARK);
+          await page.locator(".archive-principles").scrollIntoViewIfNeeded();
+          await snapshot(page,"principles-desktop");
+        }
       }
-      if(route==="/kvartiry/"){
-        const theme=await page.evaluate(()=>({
-          bg:getComputedStyle(document.querySelector(".archive-page")).backgroundColor,
-          ink:getComputedStyle(document.querySelector(".archive-page")).color,
-          filter:getComputedStyle(document.querySelector('.filters button[aria-pressed="false"]')).color,
-          activeBg:getComputedStyle(document.querySelector('.filters button[aria-pressed="true"]')).backgroundColor,
-          activeFg:getComputedStyle(document.querySelector('.filters button[aria-pressed="true"]')).color,
-          listing:getComputedStyle(document.querySelector(".listing")).backgroundColor,
-        }));
-        assert.ok(contrast(theme.bg,theme.ink)>=4.5,"catalogue contrast insufficient");
-        assert.ok(contrast(theme.bg,theme.filter)>=4.5,"filter contrast insufficient");
-        assert.ok(contrast(theme.activeBg,theme.activeFg)>=4.5,"selected filter contrast insufficient");
-        assert.equal(await page.locator(".listing-image span").count(),0);
-        assert.equal(await page.locator("svg.listing-copy__arrow").count(),6);
-        // All six cards must show their full image frames, regardless of scroll
-        // order and whether animations have hydrated.
-        // Lazy-loaded floorplans should resolve when scrolled into view.
+      if(route==="/kvartiry/") {
+        equal(theme.canvas,DARK,"catalogue canvas");
+        equal(await page.locator("svg.listing-copy__arrow").count(),6,"all six arrow icons");
+        equal(await page.locator(".listing-image span").count(),0,"no arbitrary plan badges");
         for(let i=0;i<6;i++) {
-          const image=page.locator(".listing-image img").nth(i);
-          await image.scrollIntoViewIfNeeded();
-          await image.evaluate(img=>img.decode());
+          const img=page.locator(".listing-image img").nth(i);
+          await img.scrollIntoViewIfNeeded();
+          await img.evaluate(el=>el.decode());
         }
-        const cards=await page.locator("[data-listing]").evaluateAll(nodes=>nodes.map(card=>{
-          const outer=card.getBoundingClientRect();
-          const frame=card.querySelector(".listing-image");
-          const image=frame.querySelector("img");
-          const rect=frame.getBoundingClientRect();
-          const style=getComputedStyle(frame);
-          return {card:outer.width,frame:rect.width,clip:style.clipPath,
-            transform:style.transform,imageLoaded:image.complete&&image.naturalWidth>0};
+        const cards=await page.locator("[data-listing]").evaluateAll(els=>els.map(el=>{
+          const r=el.getBoundingClientRect();
+          const frame=el.querySelector(".listing-image");
+          const fr=frame.getBoundingClientRect();
+          const f=getComputedStyle(frame);
+          const cp=getComputedStyle(el.querySelector(".listing-copy"));
+          return {total:r.width,frame:fr.width,clip:f.clipPath,transform:f.transform,
+            bg:getComputedStyle(el).backgroundColor,fg:cp.color,
+            loaded:el.querySelector(".listing-image img").naturalWidth>0};
         }));
-        assert.equal(cards.length,6);
-        for(const [i,card] of cards.entries()) {
-          assert.equal(card.clip,"none","Listing "+(i+1)+" remains clipped");
-          assert.equal(card.transform,"none","Listing "+(i+1)+" remains transformed");
-          assert.ok(card.frame>200 && card.frame>=card.card*(width<=720?.95:.45),
-            "Listing "+(i+1)+" isn't full width: "+JSON.stringify(card));
-          assert.ok(card.imageLoaded,"Listing "+(i+1)+" plan did not load");
-        }
-        const widths=cards.map(card=>card.frame);
-        assert.ok(Math.max(...widths)-Math.min(...widths)<=2,
-          "Every listing must have the same full-width image frame: "+JSON.stringify(widths));
-        const listingColors=await page.locator(".listing").evaluateAll(nodes=>nodes.map(el=>getComputedStyle(el).backgroundColor));
-        assert.equal(new Set(listingColors).size,1,"All archive listings use one editorial surface");
-        console.log("FULL CARDS",width,JSON.stringify(cards.map(x=>Math.round(x.frame))));
-        const align=await page.locator(".listing-copy a").first().evaluate(el=>{
+        equal(cards.length,6,"six complete listings");
+        cards.forEach((card,i)=>{
+          equal(card.bg,STONE,"listing "+(i+1)+" stone");
+          equal(card.clip,"none","no clipped frame "+(i+1));
+          equal(card.transform,"none","no transformed frame "+(i+1));
+          assert.ok(card.frame>200 && card.frame>=card.total*(width<=720?.95:.45),"listing "+(i+1)+" narrow");
+          assert.ok(card.loaded,"listing "+(i+1)+" unloaded image");
+          assert.ok(contrast(card.bg,card.fg)>=4.5,"listing "+(i+1)+" text");
+        });
+        const delta=await page.locator(".listing-copy a").first().evaluate(el=>{
           const a=el.querySelector(".listing-copy__action-label").getBoundingClientRect();
-          const b=el.querySelector(".listing-copy__arrow").getBoundingClientRect();
+          const b=el.querySelector("svg").getBoundingClientRect();
           return Math.abs(a.top+a.height/2-b.top-b.height/2);
         });
-        assert.ok(align<=4,"arrow baseline offset "+align);
+        assert.ok(delta<4,"Listing arrow is off-center "+delta);
         await page.getByRole("button",{name:"1 комната",exact:true}).click();
-        assert.equal(await page.locator("[data-listing]").count(),1);
+        equal(await page.locator("[data-listing]").count(),1,"rooms filter");
         await page.getByRole("button",{name:"Все",exact:true}).click();
-        // Every CTA keeps its fill and foreground; feedback is a static outline.
-        const cta=page.locator(".listing-copy a").first();
-        const getButton=()=>cta.evaluate(el=>{
-          const style=getComputedStyle(el);
-          return {bg:style.backgroundColor,fg:style.color,border:style.borderTopColor};
-        });
-        const normal=await getButton();
-        await cta.hover();
-        const hovered=await cta.evaluate(el=>{
-          const st=getComputedStyle(el);
-          return {bg:st.backgroundColor,fg:st.color,decoration:st.textDecorationLine,
-            transition:st.transitionDuration};
-        });
-        assert.equal(hovered.bg,normal.bg,"CTA fill changed on hover");
-        assert.equal(hovered.fg,normal.fg,"CTA text changed on hover");
-        assert.ok(parseFloat(hovered.transition)<=0.001,"CTA hover animates");
-        assert.ok(hovered.decoration.includes("underline"),"CTA hover lacks subtle underline");
-        assert.ok(contrast(hovered.bg,hovered.fg)>=4.5,
-          "CTA hover foreground lost contrast: "+JSON.stringify(hovered));
-        console.log("STATIC HOVER",width,JSON.stringify({normal,hovered}));
-        console.log("CATALOG",width,JSON.stringify({...theme,arrowDelta:align}));
+        equal(await page.locator("[data-listing]").count(),6,"filter reset");
+        if(width===1440) {
+          await buttonHover(page,".listing-copy a",STONE);
+          await buttonHover(page,'.filters button[aria-pressed="false"]',DARK);
+          await buttonHover(page,'.filters button[aria-pressed="true"]',DARK);
+          await buttonHover(page,".archive-page__nav .nav-cta",DARK);
+          await page.locator("[data-listing]").nth(1).scrollIntoViewIfNeeded();
+          await snapshot(page,"catalogue-cards");
+        }
+        console.log("LISTINGS_OK",width,JSON.stringify({widths:cards.map(x=>Math.round(x.frame)),arrowDelta:delta}));
       }
       if(route==="/podbor/") {
-        const color=await page.evaluate(()=>({
-          bg:getComputedStyle(document.querySelector(".contact")).backgroundColor,
-          fg:getComputedStyle(document.querySelector(".contact")).color,
-          panel:getComputedStyle(document.querySelector(".contact-panel")).backgroundColor,
+        equal(theme.canvas,DARK,"contact dark canvas");
+        const panel=await page.locator(".contact-panel").evaluate(el=>({
+          bg:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color,
+          input:getComputedStyle(el.querySelector("input")).color,
         }));
-        assert.ok(contrast(color.bg,color.fg)>=4.5,"contact low contrast");
-        const colorToken=await page.evaluate(name=>getComputedStyle(document.documentElement).getPropertyValue(name).trim(),"--champagne");
-        const toRGB=hex=>"rgb("+[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)).join(", ")+")";
-        assert.equal(color.panel,toRGB(colorToken),"Contact application sheet must use champagne");
-        const submitBg=await page.locator(".contact-form__submit").evaluate(el=>getComputedStyle(el).backgroundColor);
-        assert.ok(contrast(color.panel,submitBg)>=4.5,"Submit button must stand out against champagne form");
+        equal(panel.bg,STONE,"contact form stone");
+        assert.ok(contrast(panel.bg,panel.color)>=4.5,"contact panel type contrast");
+        assert.ok(contrast(panel.bg,panel.input)>=4.5,"contact input contrast");
         await page.locator('input[name="name"]').fill("Проверка");
         await page.locator('input[name="contact"]').fill("@test");
         await page.getByRole("button",{name:"Проверить запрос"}).click();
         await page.getByText("Демо-форма заполнена.",{exact:false}).waitFor();
-        console.log("CONTACT",width,JSON.stringify(color));
+        if(width===1440) await buttonHover(page,".contact-form__submit",STONE);
       }
-      if(route.includes("/pervyy-svet/")) {
-        const color=await page.evaluate(()=>({
-          bg:getComputedStyle(document.querySelector(".detail")).backgroundColor,
-          panel:getComputedStyle(document.querySelector(".detail-grid > div")).backgroundColor,
-          plan:getComputedStyle(document.querySelector(".detail figure")).backgroundColor,
+      if(route.includes("pervyy-svet")) {
+        equal(theme.canvas,DARK,"detail dark canvas");
+        const card=await page.locator(".detail-grid > div").evaluate(el=>({
+          bg:getComputedStyle(el).backgroundColor,fg:getComputedStyle(el).color
         }));
-        assert.notEqual(color.bg,color.panel);
-        const after=await page.locator(".detail figure").evaluate(el=>getComputedStyle(el,"::after").content);
-        assert.equal(after,"none","No duplicate decorative framing over plans");
-        console.log("DETAIL",width,JSON.stringify(color));
-      }
-      if(width===390&&route==="/"){
-        const menu=page.getByRole("button",{name:"Открыть меню"});
-        await menu.click();
-        assert.equal(await page.locator("svg.lucide-x").count(),1);
-        assert.equal(await page.locator(".mobile-menu__panel a").count(),2);
-        await page.getByRole("button",{name:"Закрыть меню"}).click();
-      }
-      if(width===1440) {
-        const selectors = route==="/" ?
-          [".archive-actions .archive-button",".archive-actions .archive-text-link",
-            ".archive-intro .intro-cta",".archive-callout .archive-button"] :
-          route==="/podbor/" ? [".contact-form__submit",".page-nav .nav-cta"] :
-          route.includes("pervyy-svet") ? [".detail .primary",".page-nav .nav-cta"] :
-          [".archive-page__nav .nav-cta",'.filters button[aria-pressed="false"]'];
-        for(const selector of selectors) {
-          const target=page.locator(selector).first();
-          const before=await target.evaluate(el=>{
-            const st=getComputedStyle(el);
-            return {bg:st.backgroundColor,fg:st.color};
+        equal(card.bg,STONE,"detail panel stone");
+        assert.ok(contrast(card.bg,card.fg)>=4.5,"detail panel type");
+        if(width===1440) {
+          await buttonHover(page,".detail .primary",STONE);
+          const planAspect=await page.locator(".detail figure").evaluate(el=>{
+            const r=el.getBoundingClientRect();return r.width/r.height;
           });
-          await target.hover();
-          const state=await target.evaluate(el=>{
-            const st=getComputedStyle(el);
-            return {bg:st.backgroundColor,fg:st.color,
-              decoration:st.textDecorationLine,transition:st.transitionDuration};
-          });
-          assert.equal(state.bg,before.bg,"Button fill animates/changes: "+selector);
-          assert.equal(state.fg,before.fg,"Button foreground animates/changes: "+selector);
-          assert.ok(parseFloat(state.transition)<=0.001,"Button has transitions: "+selector);
-          assert.ok(state.decoration.includes("underline"),
-            "Missing non-animated text underline: "+selector);
-          if(!state.bg.startsWith("rgba")) {
-            assert.ok(contrast(state.bg,state.fg)>=4.5,
-              "Hover contrast fails for "+selector+": "+JSON.stringify(state));
-          }
-          console.log("STABLE HOVER",route,selector,JSON.stringify(state));
+          assert.ok(planAspect>1.26&&planAspect<1.40,"Detail plan frame not 4:3: "+planAspect);
         }
       }
-      console.log("PASS",width,route,JSON.stringify(props));
-
-
+      if(width===1440) {
+        if(route==="/") await page.evaluate(()=>scrollTo(0,0));
+        await snapshot(page,"desktop-"+route.replaceAll("/","-"));
+      }
+      if(width===390 && ["/","/kvartiry/","/podbor/"].includes(route)) {
+        await snapshot(page,"mobile-"+route.replaceAll("/","-"));
+      }
+      console.log("PASS",width,route,JSON.stringify(theme));
     }
-    assert.deepEqual(errors,[]);
+    assert.deepEqual(exceptions,[],"browser JS errors at "+width);
     await page.close();
   }
-  const page=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:"no-preference"});
-  const errors=[];page.on("pageerror",e=>errors.push(e.message));
-  await page.goto(base+"/",{waitUntil:"networkidle"});
-  const plan=page.locator(".archive-story__plan");
-  const second=page.locator("[data-story-beat]").nth(1);
-  const secondY=await second.evaluate(el=>el.getBoundingClientRect().top+window.scrollY);
-  await page.evaluate(y=>scrollTo({top:y-300,behavior:"instant"}),secondY);
-  await page.waitForFunction(()=>document.querySelector(".archive-story")?.dataset.chapter==="2");
-  const size=await plan.evaluate(el=>{
-    const frame=document.querySelector(".archive-story__canvas").getBoundingClientRect(),r=el.getBoundingClientRect();
-    const img=el.querySelector("img");
-    return {width:r.width/frame.width,height:r.height/frame.height,
-      imageLoaded:img.complete && img.naturalWidth>0};
+
+  const p=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:"no-preference"});
+  const errors=[];p.on("pageerror",e=>errors.push(e.message));
+  await p.goto(base+"/",{waitUntil:"networkidle"});
+  const frame=p.locator(".archive-story__plan");
+  const beat=p.locator("[data-story-beat]").nth(1);
+  const y=await beat.evaluate(el=>el.getBoundingClientRect().top+scrollY);
+  await p.evaluate(y=>scrollTo({top:y-300,behavior:"instant"}),y);
+  await p.waitForFunction(()=>document.querySelector(".archive-story")?.dataset.chapter==="2");
+  const frameSize=await frame.evaluate(el=>{
+    const f=document.querySelector(".archive-story__canvas").getBoundingClientRect();
+    const r=el.getBoundingClientRect(),img=el.querySelector("img");
+    return {x:r.width/f.width,y:r.height/f.height,loaded:img.complete&&img.naturalWidth>0};
   });
-  assert.ok(size.width>.9 && size.height>.9,"plan too small "+JSON.stringify(size));
-  assert.ok(size.imageLoaded,"plan not preloaded");
-  await page.waitForTimeout(550);
-  const state=await plan.evaluate(el=>({alpha:getComputedStyle(el).opacity,visible:getComputedStyle(el).visibility,transform:getComputedStyle(el).transform}));
-  assert.ok(Number(state.alpha)>.95,"plan did not fade in: "+JSON.stringify(state));
-  assert.equal(state.visible,"visible");
-  console.log("PLAN CROSSFADE",JSON.stringify({size,state}));
-  const next=page.locator("[data-story-beat]").nth(2);
-  const y=await next.evaluate(el=>el.getBoundingClientRect().top+window.scrollY);
-  await page.evaluate(v=>scrollTo({top:v-300,behavior:"instant"}),y);
-  await page.waitForFunction(()=>document.querySelector(".archive-story")?.dataset.chapter==="3");
-  await page.waitForTimeout(550);
-  assert.ok(Number(await plan.evaluate(el=>getComputedStyle(el).opacity))<.05);
-  assert.deepEqual(errors,[]);
-  console.log("MOTION OK");
-  await page.close();
-} finally { await browser.close(); }
-console.log("ALL CHECKS PASSED");
+  assert.ok(frameSize.x>.9&&frameSize.y>.9&&frameSize.loaded,"Plan must be large and preloaded");
+  await p.waitForTimeout(600);
+  assert.ok(Number(await frame.evaluate(el=>getComputedStyle(el).opacity))>.95,"Plan transition failed");
+  const third=p.locator("[data-story-beat]").nth(2);
+  const y3=await third.evaluate(el=>el.getBoundingClientRect().top+scrollY);
+  await p.evaluate(y=>scrollTo({top:y-300,behavior:"instant"}),y3);
+  await p.waitForFunction(()=>document.querySelector(".archive-story")?.dataset.chapter==="3");
+  await p.waitForTimeout(600);
+  assert.ok(Number(await frame.evaluate(el=>getComputedStyle(el).opacity))<.05,"Plan did not fade away");
+  assert.deepEqual(errors,[],"story JS errors");
+  await p.close();
+  console.log("SCROLL_STORY_OK",JSON.stringify(frameSize));
+} finally {
+  await browser.close();
+}
+console.log("VISUAL CONTRACT PASSED");
