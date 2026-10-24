@@ -195,16 +195,6 @@ try {
           console.log("STABLE HOVER",route,selector,JSON.stringify(state));
         }
       }
-      if(width===1440 || width===390 && route==="/podbor/") {
-        const shot=await page.screenshot({type:"jpeg",quality:40});
-        console.log("PREVIEW_IMAGE|"+width+"|"+route+"|"+shot.toString("base64"));
-        if(route==="/") {
-          await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:"instant"}));
-          await page.waitForTimeout(100);
-          const tail=await page.screenshot({type:"jpeg",quality:40});
-          console.log("PREVIEW_IMAGE|"+width+"|footer|"+tail.toString("base64"));
-        }
-      }
       console.log("PASS",width,route,JSON.stringify(props));
 
 
