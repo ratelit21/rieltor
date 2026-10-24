@@ -86,21 +86,27 @@ try {
         await page.getByRole("button",{name:"1 комната",exact:true}).click();
         assert.equal(await page.locator("[data-listing]").count(),1);
         await page.getByRole("button",{name:"Все",exact:true}).click();
-        // Visible CTA hover with readable foreground and a changed fill.
+        // Hover must be immediately visible without animating or changing the fill.
         const cta=page.locator(".listing-copy a").first();
         const getButton=()=>cta.evaluate(el=>{
           const style=getComputedStyle(el);
           return {bg:style.backgroundColor,fg:style.color,border:style.borderTopColor};
         });
         const normal=await getButton();
-        await cta.hover();await page.waitForTimeout(340);
-        const hovered=await getButton();
-        assert.notEqual(hovered.bg,normal.bg,"CTA hover didn't visibly change fill");
-        assert.ok(contrast(hovered.bg,hovered.fg)>=4.5,
-          "CTA hover foreground lost contrast: "+JSON.stringify(hovered));
-        assert.ok(contrast(hovered.bg,theme.bg)>=1.05,
-          "CTA hover merged with whole page canvas");
-        console.log("HOVER",width,JSON.stringify({normal,hovered}));
+        await cta.hover();
+        const hovered=await cta.evaluate(el=>{
+          const st=getComputedStyle(el);
+          return {bg:st.backgroundColor,fg:st.color,
+            outlineStyle:st.outlineStyle,outlineWidth:st.outlineWidth,
+            transitionDuration:st.transitionDuration};
+        });
+        assert.equal(hovered.bg,normal.bg,"CTA background changed on hover");
+        assert.equal(hovered.fg,normal.fg,"CTA text color changed on hover");
+        assert.equal(hovered.transitionDuration,"0s","CTA still animates");
+        assert.equal(hovered.outlineStyle,"solid","CTA hover must have a static outline");
+        assert.ok(parseFloat(hovered.outlineWidth)>=2,"CTA hover outline too thin");
+        assert.ok(contrast(hovered.bg,hovered.fg)>=4.5,"CTA lost contrast on hover");
+        console.log("STEADY HOVER",width,JSON.stringify({normal,hovered}));
         console.log("CATALOG",width,JSON.stringify({...theme,arrowDelta:align}));
       }
       if(route==="/podbor/") {
@@ -141,21 +147,51 @@ try {
           [".archive-page__nav .nav-cta",'.filters button[aria-pressed="false"]'];
         for(const selector of selectors) {
           const target=page.locator(selector).first();
-          const before=await target.evaluate(el=>getComputedStyle(el).backgroundColor);
-          await target.hover(); await page.waitForTimeout(310);
-          const state=await target.evaluate(el=>{
-            const style=getComputedStyle(el);
-            return {bg:style.backgroundColor,fg:style.color};
+          const before=await target.evaluate(el=>{
+            const st=getComputedStyle(el);
+            return {bg:st.backgroundColor,fg:st.color};
           });
-          assert.notEqual(state.bg,before,"No visible hover background for "+selector);
+          await target.hover();
+          const state=await target.evaluate(el=>{
+            const st=getComputedStyle(el);
+            return {bg:st.backgroundColor,fg:st.color,outline:st.outlineStyle,
+              outlineWidth:st.outlineWidth,transition:st.transitionDuration};
+          });
+          assert.equal(state.bg,before.bg,"Button background morphs: "+selector);
+          assert.equal(state.fg,before.fg,"Button text color morphs: "+selector);
+          assert.equal(state.transition,"0s","Button has animation: "+selector);
+          assert.equal(state.outline,"solid","Missing hover outline: "+selector);
+          assert.ok(parseFloat(state.outlineWidth)>=2,"Hover outline is too thin: "+selector);
           if(!state.bg.startsWith("rgba")) {
             assert.ok(contrast(state.bg,state.fg)>=4.5,
               "Hover contrast fails for "+selector+": "+JSON.stringify(state));
           }
-          console.log("HOVER PASS",route,selector,JSON.stringify(state));
+          console.log("STATIC HOVER PASS",route,selector,JSON.stringify(state));
         }
       }
       console.log("PASS",width,route,JSON.stringify(props));
+      if(width===1440) {
+        const bytes=await page.screenshot({type:"jpeg",quality:42});
+        console.log("VISUAL|"+route+"|"+bytes.toString("base64"));
+        if(route==="/"){
+          for(const selector of [".archive-principles",".archive-callout"]){
+            await page.locator(selector).scrollIntoViewIfNeeded();
+            const shot=await page.screenshot({type:"jpeg",quality:42});
+            console.log("VISUAL|"+selector+"|"+shot.toString("base64"));
+          }
+        }
+        if(route==="/kvartiry/"){
+          await page.locator("[data-listing]").nth(1).scrollIntoViewIfNeeded();
+          const shot=await page.screenshot({type:"jpeg",quality:42});
+          console.log("VISUAL|catalogue-second|"+shot.toString("base64"));
+          const dark=await page.locator("[data-listing]").nth(1).evaluate(el=>{
+            const st=getComputedStyle(el);
+            const fg=getComputedStyle(el.querySelector(".listing-copy"));
+            return {bg:st.backgroundColor,fg:fg.color};
+          });
+          assert.ok(contrast(dark.bg,dark.fg)>=4.5,"Dark listing contrast insufficient");
+        }
+      }
 
 
     }
