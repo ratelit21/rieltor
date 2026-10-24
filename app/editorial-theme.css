@@ -225,8 +225,8 @@ legend, .filters strong { color: var(--forest); }
 .detail h1 { color: var(--ivory); }
 .detail dl, .detail ul { border-color: var(--line); }
 .detail .detail-lead, .detail li { color: #deddd4; }
-.detail figure { background: var(--canvas); border: 1px solid var(--line-dark); }
-.detail figure::after { border-color: var(--line-dark); }
+.detail figure { background: var(--canvas); border: 0; }
+.detail figure::after { content: none; }
 .detail figcaption { color: var(--ink); }
 .detail .primary { background: var(--champagne); color: var(--night); border-color: var(--champagne); }
 .detail .primary:hover {
