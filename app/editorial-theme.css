@@ -5,23 +5,22 @@
  * No white control fills, no off-palette bronze/green surfaces.
  */
 :root {
-  --canvas: #e4ddd2;
-  --warm-stone: #e4ddd2;
-  --sand: #e4ddd2;
-  --surface: #e4ddd2;
-  --surface-raised: #d8ccba;
+  --canvas: #dcd0bf;
+  --warm-stone: #dcd0bf;
+  --sand: #dcd0bf;
+  --surface: #dcd0bf;
+  --surface-raised: #cfbea7;
   --night: #252b28;
   --warm-graphite: #252b28;
   --warm-walnut: #252b28;
-  --forest: #31483f;
-  --moss: #445b51;
+  --forest: #234638;
+  --moss: #31594b;
   --ink: #252b28;
   --ivory: #eee7dc;
-  --champagne: #d8bc8a;
-  --champagne-soft: #b99a67;
+  --champagne: #dbb77c;
   --muted: #cbc6bc;
   --line: rgba(238,231,220,.24);
-  --line-dark: rgba(37,43,40,.23);
+  --line-dark: rgba(37,43,40,.30);
   --label-size: clamp(15px, 1.14vw, 17px);
   --action-size: clamp(15px, 1.12vw, 16px);
 }
@@ -86,13 +85,20 @@ html, body { background: var(--canvas); color: var(--ink); }
 .archive-page__nav a:not(.archive-brand):not(.nav-cta):hover { color: var(--champagne); }
 .mobile-menu__panel { background: var(--canvas); color: var(--ink); border-color: var(--line-dark); }
 .mobile-menu__panel a { border-color: var(--line-dark); }
-.mobile-menu__panel a:hover { background: var(--champagne); color: var(--ink); }
+.mobile-menu__panel a:hover {
+  background: var(--canvas);
+  color: var(--ink);
+  outline-offset: -2px;
 
-/* One button language: champagne on dark, green on stone.
- * The hover MUST change both fill and foreground while retaining >= 4.5:1.
- * Never fill a button with white/near-white and never leave a dark CTA
- * on a matching dark section.
- */
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
+}
+
+/* A single static interaction language: hover never animates or swaps the
+ * background. Keep legible champagne/forest fills and reveal a high-contrast
+ * outline instantly, including on touch-independent keyboard focus. */
 .archive-button, .primary,
 .archive-callout .archive-button, .archive-page__outro .archive-button {
   background: var(--champagne);
@@ -101,29 +107,57 @@ html, body { background: var(--canvas); color: var(--ink); }
 }
 .archive-button:hover, .primary:hover,
 .archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
-  background: var(--champagne-soft); border-color: var(--champagne-soft); color: var(--night);
+  background: var(--champagne);
+  border-color: var(--champagne);
+  color: var(--night);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .archive-text-link {
   background: transparent; border-color: var(--champagne); color: var(--champagne);
 }
 .archive-text-link:hover {
-  background: var(--champagne); border-color: var(--champagne); color: var(--night);
+  background: transparent;
+  border-color: var(--champagne);
+  color: var(--champagne);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .intro-cta {
   background: var(--forest); border-color: var(--forest); color: var(--ivory);
 }
 .intro-cta:hover {
-  background: var(--champagne); border-color: var(--forest); color: var(--forest);
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--ivory);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .nav-cta, .page-nav--light .nav-cta {
   background: transparent; border-color: var(--champagne); color: var(--champagne);
 }
 .nav-cta:hover, .page-nav--light .nav-cta:hover {
-  background: var(--champagne); border-color: var(--champagne); color: var(--night);
+  background: transparent;
+  border-color: var(--champagne);
+  color: var(--champagne);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .archive-button, .archive-text-link, .intro-cta,
 .listing-copy a, .primary, .nav-cta, .filters button {
-  transition: background-color .21s ease, border-color .21s ease, color .21s ease;
+  transition: none;
 }
 .archive-button:focus-visible, .archive-text-link:focus-visible,
 .intro-cta:focus-visible, .listing-copy a:focus-visible, .primary:focus-visible,
@@ -142,13 +176,27 @@ legend, .filters strong { color: var(--forest); }
   color: var(--ink); background: transparent; border-color: var(--line-dark);
 }
 .filters button:hover:not([aria-pressed="true"]) {
-  background: var(--champagne); border-color: var(--forest); color: var(--ink);
+  background: transparent;
+  border-color: var(--forest);
+  color: var(--ink);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .filters button[aria-pressed="true"] {
   background: var(--forest); border-color: var(--forest); color: var(--ivory);
 }
 .filters button[aria-pressed="true"]:hover {
-  background: #425c50; border-color: #425c50; color: var(--ivory);
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--ivory);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .filters button:focus-visible { outline-color: var(--forest); }
 .listing-grid { gap: clamp(20px,2.7vw,36px); }
@@ -174,7 +222,14 @@ legend, .filters strong { color: var(--forest); }
   background: var(--champagne); color: var(--night); border-color: var(--champagne);
 }
 .listing-copy a:hover {
-  background: var(--champagne-soft); color: var(--night); border-color: var(--champagne-soft);
+  background: var(--champagne);
+  color: var(--night);
+  border-color: var(--champagne);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .listing-copy a .listing-copy__action-label { line-height: 1.4; }
 .listing-copy a svg.listing-copy__arrow { display: block; flex: 0 0 20px; width: 20px; height: 20px; transform: none; }
@@ -213,7 +268,14 @@ legend, .filters strong { color: var(--forest); }
   background: var(--forest); color: var(--ivory); border-color: var(--forest);
 }
 .contact-form__submit:hover {
-  background: var(--canvas); color: var(--forest); border-color: var(--forest);
+  background: var(--forest);
+  color: var(--ivory);
+  border-color: var(--forest);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 
 /* Detail: warm stone around a dark editorial sheet + champagne action. */
@@ -230,7 +292,14 @@ legend, .filters strong { color: var(--forest); }
 .detail figcaption { color: var(--ink); }
 .detail .primary { background: var(--champagne); color: var(--night); border-color: var(--champagne); }
 .detail .primary:hover {
-  background: var(--champagne-soft); color: var(--night); border-color: var(--champagne-soft);
+  background: var(--champagne);
+  color: var(--night);
+  border-color: var(--champagne);
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 
 /* Mobile: the same fully visible images; no cards narrower than their column. */
@@ -245,3 +314,17 @@ legend, .filters strong { color: var(--forest); }
 @media (prefers-reduced-motion: reduce) {
   .listing-image img { transition: none; }
 }
+
+/* A single green signature section closes the homepage decisively. */
+.archive-callout, .archive-page__outro {
+  background: var(--forest);
+  color: var(--ivory);
+}
+.archive-callout h2 em, .archive-page__outro h2 em {
+  color: var(--champagne);
+}
+.archive-callout__lead { color: var(--ivory); }
+
+/* The entire page family shares a richer stone surface, not diluted beige. */
+.archive-intro, .archive-principles,
+.archive-page, .detail { background: var(--canvas); }

@@ -37,6 +37,17 @@ try {
         assert.equal(await page.locator(".archive-story__end-arrow").count(),1);
         const principles=await page.locator(".archive-principles").evaluate(el=>getComputedStyle(el).backgroundColor);
         assert.equal(principles,colors.intro,"Principles and introduction must share the warm-stone material");
+        const ctaColors=await page.locator(".archive-callout").evaluate(el=>({
+          bg:getComputedStyle(el).backgroundColor,
+          fg:getComputedStyle(el).color,
+          accent:getComputedStyle(el.querySelector("h2 em")).color
+        }));
+        const forest=await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue("--forest").trim());
+        const toRgb=hex=>"rgb("+[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)).join(", ")+")";
+        assert.equal(ctaColors.bg,toRgb(forest),"Final CTA must use the same brand forest color");
+        assert.ok(contrast(ctaColors.bg,ctaColors.fg)>=4.5,"Final CTA body text too pale");
+        assert.ok(contrast(ctaColors.bg,ctaColors.accent)>=4.5,"Final CTA champagne accent lacks contrast");
+        console.log("FINAL CTA COLORS",width,JSON.stringify(ctaColors));
         const heroAction=await page.locator(".archive-actions .archive-button").evaluate(el=>getComputedStyle(el).backgroundColor);
         assert.notEqual(heroAction,"rgb(247, 243, 237)","No white/porcelain button fills");
         console.log("COLORS",width,JSON.stringify(colors));
@@ -95,21 +106,26 @@ try {
         await page.getByRole("button",{name:"1 комната",exact:true}).click();
         assert.equal(await page.locator("[data-listing]").count(),1);
         await page.getByRole("button",{name:"Все",exact:true}).click();
-        // Visible CTA hover with readable foreground and a changed fill.
+        // Every CTA keeps its fill and foreground; feedback is a static outline.
         const cta=page.locator(".listing-copy a").first();
         const getButton=()=>cta.evaluate(el=>{
           const style=getComputedStyle(el);
           return {bg:style.backgroundColor,fg:style.color,border:style.borderTopColor};
         });
         const normal=await getButton();
-        await cta.hover();await page.waitForTimeout(340);
-        const hovered=await getButton();
-        assert.notEqual(hovered.bg,normal.bg,"CTA hover didn't visibly change fill");
+        await cta.hover();
+        const hovered=await cta.evaluate(el=>{
+          const st=getComputedStyle(el);
+          return {bg:st.backgroundColor,fg:st.color,decoration:st.textDecorationLine,
+            transition:st.transitionDuration};
+        });
+        assert.equal(hovered.bg,normal.bg,"CTA fill changed on hover");
+        assert.equal(hovered.fg,normal.fg,"CTA text changed on hover");
+        assert.ok(parseFloat(hovered.transition)<=0.001,"CTA hover animates");
+        assert.ok(hovered.decoration.includes("underline"),"CTA hover lacks subtle underline");
         assert.ok(contrast(hovered.bg,hovered.fg)>=4.5,
           "CTA hover foreground lost contrast: "+JSON.stringify(hovered));
-        assert.ok(contrast(hovered.bg,theme.bg)>=1.05,
-          "CTA hover merged with whole page canvas");
-        console.log("HOVER",width,JSON.stringify({normal,hovered}));
+        console.log("STATIC HOVER",width,JSON.stringify({normal,hovered}));
         console.log("CATALOG",width,JSON.stringify({...theme,arrowDelta:align}));
       }
       if(route==="/podbor/") {
@@ -157,18 +173,26 @@ try {
           [".archive-page__nav .nav-cta",'.filters button[aria-pressed="false"]'];
         for(const selector of selectors) {
           const target=page.locator(selector).first();
-          const before=await target.evaluate(el=>getComputedStyle(el).backgroundColor);
-          await target.hover(); await page.waitForTimeout(310);
-          const state=await target.evaluate(el=>{
-            const style=getComputedStyle(el);
-            return {bg:style.backgroundColor,fg:style.color};
+          const before=await target.evaluate(el=>{
+            const st=getComputedStyle(el);
+            return {bg:st.backgroundColor,fg:st.color};
           });
-          assert.notEqual(state.bg,before,"No visible hover background for "+selector);
+          await target.hover();
+          const state=await target.evaluate(el=>{
+            const st=getComputedStyle(el);
+            return {bg:st.backgroundColor,fg:st.color,
+              decoration:st.textDecorationLine,transition:st.transitionDuration};
+          });
+          assert.equal(state.bg,before.bg,"Button fill animates/changes: "+selector);
+          assert.equal(state.fg,before.fg,"Button foreground animates/changes: "+selector);
+          assert.ok(parseFloat(state.transition)<=0.001,"Button has transitions: "+selector);
+          assert.ok(state.decoration.includes("underline"),
+            "Missing non-animated text underline: "+selector);
           if(!state.bg.startsWith("rgba")) {
             assert.ok(contrast(state.bg,state.fg)>=4.5,
               "Hover contrast fails for "+selector+": "+JSON.stringify(state));
           }
-          console.log("HOVER PASS",route,selector,JSON.stringify(state));
+          console.log("STABLE HOVER",route,selector,JSON.stringify(state));
         }
       }
       console.log("PASS",width,route,JSON.stringify(props));
