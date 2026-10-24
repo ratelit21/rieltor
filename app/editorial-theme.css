@@ -126,9 +126,9 @@ html, body { background: var(--canvas); color: var(--ivory); }
   background: var(--canvas);
   color: var(--ivory);
   border-color: var(--canvas);
-  outline: 2px solid var(--canvas);
-  outline-offset: 3px;
+  outline: none;
   text-decoration-line: underline;
+  text-decoration-thickness: 1px;
   text-underline-offset: .23em;
 }
 /* Intro sits on graphite, so its CTA follows the dark-surface variant instead. */
@@ -201,8 +201,8 @@ legend, .filters strong { color: var(--warm-stone); }
 }
 .listing-copy a:hover, .listing:nth-child(3n+2) .listing-copy a:hover {
   background: var(--canvas); color: var(--ivory); border-color: var(--canvas);
-  outline: 2px solid var(--canvas); outline-offset: 3px;
-  text-decoration-line: underline; text-underline-offset: .23em;
+  outline: none;
+  text-decoration-line: underline; text-decoration-thickness: 1px; text-underline-offset: .23em;
 }
 .listing-copy a svg.listing-copy__arrow {
   display: block; flex: 0 0 20px;
@@ -241,7 +241,15 @@ legend, .filters strong { color: var(--warm-stone); }
 .detail .eyebrow, .detail dt, .detail li::before { color: var(--ink); }
 .detail h1 { color: var(--ink); }
 .detail dl, .detail ul { border-color: var(--line-dark); }
-.detail figure { background: var(--warm-stone); border: 1px solid var(--line-dark); }
+.detail figure {
+  background: var(--warm-stone);
+  border: 1px solid var(--line-dark);
+  min-height: 0;
+  aspect-ratio: 4 / 3;
+  align-self: start;
+  width: 100%;
+  overflow: hidden;
+}
 .detail figure::after { border-color: var(--line-dark); }
 .detail figcaption { color: var(--ink); }
 .detail-lead, .detail li { color: var(--ink); }
