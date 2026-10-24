@@ -1,330 +1,266 @@
 /*
- * K. — final editorial material system.
- * One restrained palette: warm taupe / forest / charcoal / champagne.
- * This stylesheet owns color and interactive states; globals.css owns layout.
- * No white control fills, no off-palette bronze/green surfaces.
+ * Final art direction
+ * Two reference surfaces, sampled from the approved screenshots:
+ * graphite-green #252B28 and warm stone #DCD0BF.
+ * Structure/responsive breakpoints: globals.css.
+ * All intentional surface colors and interaction states: this file.
  */
 :root {
-  --canvas: #dcd0bf;
-  --warm-stone: #dcd0bf;
-  --sand: #dcd0bf;
-  --surface: #dcd0bf;
-  --surface-raised: #cfbea7;
+  --canvas: #252b28;
   --night: #252b28;
   --warm-graphite: #252b28;
   --warm-walnut: #252b28;
-  --forest: #234638;
-  --moss: #31594b;
+  --forest: #252b28;
+  --moss: #252b28;
+  --warm-stone: #dccfbf;
+  --surface: #dccfbf;
+  --surface-raised: #dccfbf;
+  --sand: #dccfbf;
   --ink: #252b28;
-  --ivory: #eee7dc;
-  --champagne: #dbb77c;
-  --muted: #cbc6bc;
-  --line: rgba(238,231,220,.24);
-  --line-dark: rgba(37,43,40,.30);
-  --label-size: clamp(15px, 1.14vw, 17px);
-  --action-size: clamp(15px, 1.12vw, 16px);
+  --ivory: #f5f0e8;
+  --champagne: #dccfbf;
+  --muted: #d6d0c6;
+  --line: rgba(245,240,232,.28);
+  --line-dark: rgba(37,43,40,.25);
+  --label-size: clamp(15px,1.14vw,17px);
+  --action-size: clamp(15px,1.12vw,16px);
 }
-html, body { background: var(--canvas); color: var(--ink); }
-::selection { background: var(--champagne); color: var(--ink); }
+html, body { background: var(--canvas); color: var(--ivory); }
+::selection { background: var(--warm-stone); color: var(--ink); }
 
-/* HERO / SCROLL STORY — deep charcoal, not seven related greens. */
+/* Home: one continuous dark architectural story, then one stone chapter. */
 .archive-hero { background: var(--night); color: var(--ivory); }
 .archive-hero__veil {
-  background: linear-gradient(90deg, rgba(21,26,23,.92), rgba(27,31,28,.57) 53%, rgba(27,31,28,.17)),
-              linear-gradient(0deg, rgba(21,26,23,.64), transparent 58%);
+  background: linear-gradient(90deg,rgba(25,31,28,.9),rgba(35,42,38,.55) 54%,rgba(35,42,38,.18)),
+              linear-gradient(0deg,rgba(22,29,26,.68),transparent 57%);
 }
 .archive-nav a:hover { color: var(--champagne); }
 .archive-hero__caption, .archive-hero__caption a { color: var(--ivory); }
 .archive-hero__caption > span { color: var(--champagne); }
-.archive-story { background: var(--night); color: var(--ivory); }
-.archive-story__top .archive-kicker,
-.archive-story__intro em,
-.archive-story__chapter h3 em,
-.archive-story__chapter-index span:first-child { color: var(--champagne); }
+.archive-intro { background: var(--canvas); color: var(--ivory); border-color: var(--line); }
+.archive-intro > .archive-kicker { color: var(--champagne); }
+.archive-intro h2 em { color: var(--champagne); }
+.archive-intro__body p { color: var(--ivory); }
+.archive-story { background: var(--canvas); color: var(--ivory); }
+.archive-story__intro em, .archive-story__top .archive-kicker,
+.archive-story__chapter h3 em, .archive-story__chapter-index span:first-child { color: var(--champagne); }
 .archive-story__progress-track > span { background: var(--champagne); }
 .archive-story__end a { color: var(--ivory); border-color: var(--champagne); }
 .archive-story__end a:hover { color: var(--champagne); border-color: var(--champagne); }
-.archive-story__plan { background: var(--canvas); }
-.archive-story__plan img { object-fit: cover; }
 
-/* One warm stone backdrop, as in the previously approved principles block. */
-.archive-intro, .archive-principles {
-  background: var(--canvas);
-  color: var(--ink);
+/* The screenshot's exact warm-stone surface is the one intentional contrast. */
+.archive-principles { background: var(--warm-stone); color: var(--ink); }
+.archive-principles__heading { border-color: var(--line-dark); }
+.archive-principles__heading .archive-kicker, .archive-principles__heading em,
+.archive-principles__grid span { color: var(--ink); }
+.archive-principles__grid article, .archive-principles__grid article:last-child {
+  background: transparent; border-color: var(--line-dark);
 }
-.archive-intro { border-color: var(--line-dark); }
-.archive-intro > .archive-kicker,
-.archive-intro h2 em { color: var(--forest); }
-.archive-principles__heading,
-.archive-principles__grid article { border-color: var(--line-dark); }
-.archive-principles__heading .archive-kicker,
-.archive-principles__heading em { color: var(--forest); }
-.archive-principles__grid article,
-.archive-principles__grid article:nth-child(2) { background: transparent; }
-.archive-principles__grid span { color: #786143; }
-.archive-principles__grid p { color: #414942; }
-
-/* Final CTA: rich green is the full-sized statement, never a random dark card. */
-.archive-callout, .archive-page__outro {
-  background: var(--forest); color: var(--ivory); border-color: var(--line);
-}
+.archive-principles__grid h3, .archive-principles__grid p { color: var(--ink); }
+.archive-callout, .archive-page__outro { color: var(--ivory); background: var(--canvas); border-color: var(--line); }
 .archive-callout h2, .archive-page__outro h2 { color: var(--ivory); }
-.archive-callout h2 em, .archive-page__outro h2 em { color: var(--champagne); }
-.archive-callout__lead { color: var(--ivory); }
+.archive-callout h2 em, .archive-page__outro h2 em,
+.archive-callout > .archive-kicker, .archive-page__outro > .archive-kicker { color: var(--champagne); }
+.archive-callout__lead { color: var(--muted); }
 
-/* Inner pages share the exact warm stone tone from the principles block. */
-.archive-page, .detail { background: var(--canvas); color: var(--ink); }
-.archive-page__intro h1 { color: var(--ink); }
-.archive-page__intro h1 em { color: var(--forest); }
-.archive-page__intro > .archive-kicker,
-.archive-page__intro > p:last-child { color: var(--forest); }
-.page-nav, .archive-page__nav {
-  background: rgba(37,43,40,.98); border-color: var(--line); color: var(--ivory);
-}
-.page-nav a:not(.brand):not(.nav-cta):hover,
-.archive-page__nav a:not(.archive-brand):not(.nav-cta):hover { color: var(--champagne); }
-.mobile-menu__panel { background: var(--canvas); color: var(--ink); border-color: var(--line-dark); }
-.mobile-menu__panel a { border-color: var(--line-dark); }
-.mobile-menu__panel a:hover {
-  background: var(--canvas);
-  color: var(--ink);
-  outline-offset: -2px;
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
-}
-
-/* A single static interaction language: hover never animates or swaps the
- * background. Keep legible champagne/forest fills and reveal a high-contrast
- * outline instantly, including on touch-independent keyboard focus. */
-.archive-button, .primary,
-.archive-callout .archive-button, .archive-page__outro .archive-button {
-  background: var(--champagne);
-  border: 1px solid var(--champagne);
-  color: var(--night);
-}
-.archive-button:hover, .primary:hover,
-.archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
-  background: var(--champagne);
-  border-color: var(--champagne);
-  color: var(--night);
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
-}
-.archive-text-link {
-  background: transparent; border-color: var(--champagne); color: var(--champagne);
-}
-.archive-text-link:hover {
-  background: transparent;
-  border-color: var(--champagne);
-  color: var(--champagne);
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
-}
-.intro-cta {
-  background: var(--forest); border-color: var(--forest); color: var(--ivory);
-}
-.intro-cta:hover {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--ivory);
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
-}
-.nav-cta, .page-nav--light .nav-cta {
-  background: transparent; border-color: var(--champagne); color: var(--champagne);
-}
-.nav-cta:hover, .page-nav--light .nav-cta:hover {
-  background: transparent;
-  border-color: var(--champagne);
-  color: var(--champagne);
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
-}
-.archive-button, .archive-text-link, .intro-cta,
-.listing-copy a, .primary, .nav-cta, .filters button {
-  transition: none;
-}
-.archive-button:focus-visible, .archive-text-link:focus-visible,
-.intro-cta:focus-visible, .listing-copy a:focus-visible, .primary:focus-visible,
-.nav-cta:focus-visible, .filters button:focus-visible {
-  outline: 2px solid currentColor; outline-offset: 4px;
-}
-
-/* Archive: consistently sized full-width images, no GSAP card clipping.
- * All six cards use precisely the same dimensions, not an alternating ratio.
- * The paper-colored plan contrasts with a charcoal editorial information panel.
- */
-.catalogue { color: var(--ink); }
-.filters { border-color: var(--line-dark); }
-legend, .filters strong { color: var(--forest); }
-.filters button {
-  color: var(--ink); background: transparent; border-color: var(--line-dark);
-}
-.filters button:hover:not([aria-pressed="true"]) {
-  background: transparent;
-  border-color: var(--forest);
-  color: var(--ink);
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
-}
-.filters button[aria-pressed="true"] {
-  background: var(--forest); border-color: var(--forest); color: var(--ivory);
-}
-.filters button[aria-pressed="true"]:hover {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--ivory);
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
-}
-.filters button:focus-visible { outline-color: var(--forest); }
-.listing-grid { gap: clamp(20px,2.7vw,36px); }
-.listing, .listing:nth-child(even) {
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  background: var(--night); color: var(--ivory);
-  border: 1px solid rgba(37,43,40,.2);
-  min-width: 0; overflow: visible;
-}
-.listing:nth-child(even) .listing-image { order: 0; }
-.listing-image, .listing:nth-child(even) .listing-image {
-  display: block; align-self: stretch; min-width: 0; width: 100%;
-  clip-path: none; transform: none; background: var(--canvas);
-}
-.listing-image img { object-fit: contain; width: 100%; height: 100%; transition: transform .42s ease; }
-.listing-copy { min-width: 0; color: var(--ivory); align-self: center; }
-.listing-copy h2 { color: var(--ivory); }
-.listing-copy > p:first-child, .listing-copy > span { color: var(--champagne); }
-.listing-copy > p:nth-of-type(2) { color: #dfded7; }
-.listing-copy a {
-  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-  min-width: 0; width: fit-content; white-space: nowrap; text-align: center;
-  background: var(--champagne); color: var(--night); border-color: var(--champagne);
-}
-.listing-copy a:hover {
-  background: var(--champagne);
-  color: var(--night);
-  border-color: var(--champagne);
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
-}
-.listing-copy a .listing-copy__action-label { line-height: 1.4; }
-.listing-copy a svg.listing-copy__arrow { display: block; flex: 0 0 20px; width: 20px; height: 20px; transform: none; }
-.empty h2 { color: var(--ink); }
-.empty h2 em, .empty button { color: var(--forest); }
-.empty button { border-color: var(--forest); }
-
-/* Contact: preserve the deep green estate branding, champagne form sheet. */
-.contact { background: var(--forest); color: var(--ivory); }
-.contact-story > .eyebrow { color: var(--champagne); }
-.contact h1 { color: var(--ivory); }
-.contact h1 em { color: var(--champagne); }
+/* All internal page canvases are graphite-green, with stone cards/panels. */
+.archive-page, .contact, .detail { background: var(--canvas); color: var(--ivory); }
+.archive-page__intro { background: var(--canvas); color: var(--ivory); border-color: var(--line); }
+.archive-page__intro h1, .contact h1 { color: var(--ivory); }
+.archive-page__intro h1 em, .contact h1 em { color: var(--champagne); }
+.archive-page__intro > .archive-kicker, .contact-story > .eyebrow,
+.archive-page__intro > p:last-child { color: var(--ivory); }
 .contact-story__lead, .contact-story__aside p { color: var(--ivory); }
 .contact-story__rule { background: var(--champagne); }
 .selected { color: var(--ivory); border-color: var(--line); }
 .selected__label { color: var(--champagne); }
-.contact-panel {
-  background: var(--champagne); color: var(--night);
-  border: 1px solid rgba(37,43,40,.16);
-  box-shadow: 0 16px 44px rgba(19,27,22,.16);
-}
-.contact-panel::before { height: 1px; background: var(--forest); }
-.contact-panel__heading h2 { color: var(--ink); }
-.contact-panel__heading h2 em { color: var(--forest); }
-.contact-panel__heading .eyebrow, .contact form label { color: var(--forest); }
-.contact input, .contact textarea {
-  color: var(--ink); border-color: rgba(37,43,40,.58);
-}
-.contact input::placeholder, .contact textarea::placeholder { color: #4c5147; }
-.contact input:focus-visible, .contact textarea:focus-visible {
-  border-color: var(--forest); box-shadow: 0 1px 0 var(--forest);
-}
-.form-note { color: var(--night); }
-.contact-panel:focus-within { box-shadow: 0 20px 56px rgba(19,27,22,.22); }
-.contact-form__submit {
-  background: var(--forest); color: var(--ivory); border-color: var(--forest);
-}
-.contact-form__submit:hover {
-  background: var(--forest);
+
+/* One uninterrupted nav surface and identical mobile menu language. */
+.page-nav, .archive-page__nav {
+  background: rgba(37,43,40,.97);
   color: var(--ivory);
-  border-color: var(--forest);
+  border-color: var(--line);
+}
+.page-nav a:not(.brand):not(.nav-cta):hover,
+.archive-page__nav a:not(.archive-brand):not(.nav-cta):hover { color: var(--champagne); }
+.mobile-menu__panel {
+  background: var(--warm-stone);
+  color: var(--ink);
+  border-color: var(--line-dark);
+}
+.mobile-menu__panel a { border-color: var(--line-dark); }
+.mobile-menu__panel a:hover { background: var(--canvas); color: var(--ivory); }
 
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
+/* Buttons have only two surface states. Every hover is clearly visible. */
+.archive-button, .primary,
+.archive-callout .archive-button, .archive-page__outro .archive-button {
+  background: var(--warm-stone);
+  color: var(--ink);
+  border: 1px solid var(--warm-stone);
+}
+.archive-button:hover, .primary:hover,
+.archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
+  background: transparent;
+  color: var(--warm-stone);
+  border-color: var(--warm-stone);
   outline: none;
 }
+.archive-text-link, .nav-cta, .page-nav--light .nav-cta {
+  background: transparent;
+  color: var(--ivory);
+  border: 1px solid rgba(245,240,232,.75);
+}
+.archive-text-link:hover, .nav-cta:hover, .page-nav--light .nav-cta:hover {
+  background: var(--warm-stone);
+  color: var(--ink);
+  border-color: var(--warm-stone);
+  outline: none;
+}
+/* Primary controls on stone cards invert from graphite to transparent stone. */
+.intro-cta, .listing-copy a, .detail .primary, .contact-form__submit {
+  background: var(--canvas);
+  color: var(--ivory);
+  border: 1px solid var(--canvas);
+}
+.intro-cta:hover, .listing-copy a:hover, .detail .primary:hover, .contact-form__submit:hover {
+  background: var(--canvas);
+  color: var(--ivory);
+  border-color: var(--canvas);
+  outline: 2px solid var(--canvas);
+  outline-offset: 3px;
+  text-decoration-line: underline;
+  text-underline-offset: .23em;
+}
+/* Intro sits on graphite, so its CTA follows the dark-surface variant instead. */
+.archive-intro .intro-cta {
+  background: var(--warm-stone); color: var(--ink); border-color: var(--warm-stone);
+}
+.archive-intro .intro-cta:hover {
+  background: transparent; color: var(--warm-stone); border-color: var(--warm-stone);
+}
+.archive-button, .archive-text-link, .intro-cta, .listing-copy a,
+.primary, .nav-cta, .filters button, .contact-form__submit,
+.mobile-menu__toggle, .mobile-menu__panel a {
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+.archive-button:focus-visible, .archive-text-link:focus-visible, .intro-cta:focus-visible,
+.listing-copy a:focus-visible, .primary:focus-visible, .nav-cta:focus-visible,
+.filters button:focus-visible, .contact-form__submit:focus-visible,
+.mobile-menu__toggle:focus-visible, .mobile-menu__panel a:focus-visible {
+  outline: 3px solid currentColor; outline-offset: 4px;
+}
 
-/* Detail: warm stone around a dark editorial sheet + champagne action. */
+/* Catalogue: graphite canvas, stone filters and six identical stone listings. */
+.filters { border-color: var(--line); }
+legend, .filters strong { color: var(--warm-stone); }
+.filters button {
+  background: transparent; color: var(--ivory);
+  border: 1px solid rgba(245,240,232,.6);
+}
+.filters button:hover:not([aria-pressed="true"]) {
+  background: var(--warm-stone); border-color: var(--warm-stone); color: var(--ink);
+}
+.filters button[aria-pressed="true"] {
+  background: var(--warm-stone); border-color: var(--warm-stone); color: var(--ink);
+}
+.filters button[aria-pressed="true"]:hover {
+  background: transparent; color: var(--ivory); border-color: var(--warm-stone);
+}
+.filters button:focus-visible { outline-color: var(--warm-stone); }
+.filters p { color: var(--ivory); }
+.listing-grid { gap: clamp(22px,2.7vw,40px); }
+.listing, .listing:nth-child(even), .listing:nth-child(3n+2) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  min-width: 0;
+  overflow: visible;
+  background: var(--warm-stone);
+  border: 1px solid var(--line-dark);
+  color: var(--ink);
+}
+.listing-image, .listing:nth-child(even) .listing-image {
+  order: 0;
+  display: block; min-width: 0; width: 100%;
+  align-self: stretch;
+  background: var(--warm-stone);
+  clip-path: none; transform: none;
+}
+.listing-image img { object-fit: contain; transition: transform .35s ease; }
+.listing-copy, .listing:nth-child(3n+2) .listing-copy { color: var(--ink); min-width: 0; }
+.listing-copy h2, .listing:nth-child(3n+2) .listing-copy h2 { color: var(--ink); }
+.listing-copy > p:first-child, .listing-copy > span,
+.listing:nth-child(3n+2) .listing-copy > p:first-child,
+.listing:nth-child(3n+2) .listing-copy > span { color: var(--ink); opacity: .84; }
+.listing-copy > p:nth-of-type(2),
+.listing:nth-child(3n+2) .listing-copy > p:nth-of-type(2) { color: var(--ink); }
+.listing-copy a, .listing:nth-child(3n+2) .listing-copy a {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 12px; min-width: 0; width: fit-content;
+  background: var(--canvas); border: 1px solid var(--canvas); color: var(--ivory);
+  text-align: center; white-space: nowrap;
+}
+.listing-copy a:hover, .listing:nth-child(3n+2) .listing-copy a:hover {
+  background: var(--canvas); color: var(--ivory); border-color: var(--canvas);
+  outline: 2px solid var(--canvas); outline-offset: 3px;
+  text-decoration-line: underline; text-underline-offset: .23em;
+}
+.listing-copy a svg.listing-copy__arrow {
+  display: block; flex: 0 0 20px;
+  width: 20px; height: 20px;
+  transform: none; align-self: center;
+}
+.empty h2 { color: var(--ivory); }
+.empty h2 em, .empty button { color: var(--warm-stone); }
+.empty button { border-color: var(--warm-stone); }
+
+/* The only light consultation surface is the stone panel. */
+.contact-panel {
+  background: var(--warm-stone); color: var(--ink);
+  border: 1px solid var(--line-dark); box-shadow: none;
+}
+.contact-panel::before { height: 1px; background: var(--ink); }
+.contact-panel__heading h2 { color: var(--ink); }
+.contact-panel__heading h2 em, .contact-panel__heading .eyebrow,
+.contact form label { color: var(--ink); }
+.contact input, .contact textarea {
+  color: var(--ink);
+  border-color: rgba(37,43,40,.52);
+}
+.contact input::placeholder, .contact textarea::placeholder { color: #555b56; }
+.contact input:focus-visible, .contact textarea:focus-visible {
+  border-color: var(--ink); box-shadow: 0 1px 0 var(--ink);
+}
+.form-note { color: var(--ink); }
+.contact-panel:focus-within { box-shadow: 0 10px 35px rgba(0,0,0,.08); }
+
+/* Property page: stone content panel and plan, graphite surrounding canvas. */
 .detail-grid > div {
-  min-width: 0; background: var(--night); color: var(--ivory);
-  border: 1px solid rgba(37,43,40,.22);
+  min-width: 0; background: var(--warm-stone);
+  color: var(--ink); border: 1px solid var(--line-dark);
 }
-.detail .eyebrow, .detail dt, .detail li::before { color: var(--champagne); }
-.detail h1 { color: var(--ivory); }
-.detail dl, .detail ul { border-color: var(--line); }
-.detail .detail-lead, .detail li { color: #deddd4; }
-.detail figure { background: var(--canvas); border: 0; }
-.detail figure::after { content: none; }
+.detail .eyebrow, .detail dt, .detail li::before { color: var(--ink); }
+.detail h1 { color: var(--ink); }
+.detail dl, .detail ul { border-color: var(--line-dark); }
+.detail figure { background: var(--warm-stone); border: 1px solid var(--line-dark); }
+.detail figure::after { border-color: var(--line-dark); }
 .detail figcaption { color: var(--ink); }
-.detail .primary { background: var(--champagne); color: var(--night); border-color: var(--champagne); }
-.detail .primary:hover {
-  background: var(--champagne);
-  color: var(--night);
-  border-color: var(--champagne);
+.detail-lead, .detail li { color: var(--ink); }
 
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  outline: none;
+/* Global consistency of utility copy: not mini captions or heavy uppercase. */
+.eyebrow, .archive-kicker, legend, .listing-copy > span {
+  font-size: var(--label-size);
+  font-weight: 400; text-transform: none; letter-spacing: .01em;
 }
-
-/* Mobile: the same fully visible images; no cards narrower than their column. */
 @media (max-width: 720px) {
-  .listing, .listing:nth-child(even) { grid-template-columns: minmax(0,1fr); }
+  .listing, .listing:nth-child(even), .listing:nth-child(3n+2) {
+    grid-template-columns: minmax(0,1fr);
+  }
   .listing:nth-child(even) .listing-image { order: 0; }
-  .listing-image { min-height: 0; aspect-ratio: 4 / 3; }
-  .listing-copy a { width: 100%; white-space: normal; }
-  .detail-grid > div { padding: 28px 22px; }
-  .contact-panel { padding: 30px 24px; }
+  .listing-image { min-height: 0; aspect-ratio: 4/3; }
+  .listing-copy a, .listing:nth-child(3n+2) .listing-copy a { width: 100%; white-space: normal; }
+  .contact-panel, .detail-grid > div { padding: 30px 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .listing-image img { transition: none; }
+  .listing-image img, .archive-button, .archive-text-link, .intro-cta,
+  .listing-copy a, .primary, .nav-cta, .filters button { transition: none; }
 }
-
-/* A single green signature section closes the homepage decisively. */
-.archive-callout, .archive-page__outro {
-  background: var(--forest);
-  color: var(--ivory);
-}
-.archive-callout h2 em, .archive-page__outro h2 em {
-  color: var(--champagne);
-}
-.archive-callout__lead { color: var(--ivory); }
-
-/* The entire page family shares a richer stone surface, not diluted beige. */
-.archive-intro, .archive-principles,
-.archive-page, .detail { background: var(--canvas); }
