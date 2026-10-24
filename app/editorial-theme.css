@@ -89,8 +89,12 @@ html, body { background: var(--canvas); color: var(--ink); }
 .mobile-menu__panel a:hover {
   background: var(--canvas);
   color: var(--ink);
-  outline: 2px solid var(--forest);
   outline-offset: -2px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 
 /* A single static interaction language: hover never animates or swaps the
@@ -107,8 +111,11 @@ html, body { background: var(--canvas); color: var(--ink); }
   background: var(--champagne);
   border-color: var(--champagne);
   color: var(--night);
-  outline: 2px solid var(--champagne);
-  outline-offset: 4px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .archive-text-link {
   background: transparent; border-color: var(--champagne); color: var(--champagne);
@@ -117,8 +124,11 @@ html, body { background: var(--canvas); color: var(--ink); }
   background: transparent;
   border-color: var(--champagne);
   color: var(--champagne);
-  outline: 2px solid var(--champagne);
-  outline-offset: 4px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .intro-cta {
   background: var(--forest); border-color: var(--forest); color: var(--ivory);
@@ -127,8 +137,11 @@ html, body { background: var(--canvas); color: var(--ink); }
   background: var(--forest);
   border-color: var(--forest);
   color: var(--ivory);
-  outline: 2px solid var(--forest);
-  outline-offset: 4px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .nav-cta, .page-nav--light .nav-cta {
   background: transparent; border-color: var(--champagne); color: var(--champagne);
@@ -137,8 +150,11 @@ html, body { background: var(--canvas); color: var(--ink); }
   background: transparent;
   border-color: var(--champagne);
   color: var(--champagne);
-  outline: 2px solid var(--champagne);
-  outline-offset: 4px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .archive-button, .archive-text-link, .intro-cta,
 .listing-copy a, .primary, .nav-cta, .filters button {
@@ -164,8 +180,11 @@ legend, .filters strong { color: var(--forest); }
   background: transparent;
   border-color: var(--forest);
   color: var(--ink);
-  outline: 2px solid var(--forest);
-  outline-offset: 2px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .filters button[aria-pressed="true"] {
   background: var(--forest); border-color: var(--forest); color: var(--ivory);
@@ -174,8 +193,11 @@ legend, .filters strong { color: var(--forest); }
   background: var(--forest);
   border-color: var(--forest);
   color: var(--ivory);
-  outline: 2px solid var(--forest);
-  outline-offset: 2px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .filters button:focus-visible { outline-color: var(--forest); }
 .listing-grid { gap: clamp(20px,2.7vw,36px); }
@@ -204,8 +226,11 @@ legend, .filters strong { color: var(--forest); }
   background: var(--champagne);
   color: var(--night);
   border-color: var(--champagne);
-  outline: 2px solid var(--champagne);
-  outline-offset: 4px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 .listing-copy a .listing-copy__action-label { line-height: 1.4; }
 .listing-copy a svg.listing-copy__arrow { display: block; flex: 0 0 20px; width: 20px; height: 20px; transform: none; }
@@ -247,8 +272,11 @@ legend, .filters strong { color: var(--forest); }
   background: var(--forest);
   color: var(--ivory);
   border-color: var(--forest);
-  outline: 2px solid var(--forest);
-  outline-offset: 4px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 
 /* Detail: warm stone around a dark editorial sheet + champagne action. */
@@ -268,8 +296,11 @@ legend, .filters strong { color: var(--forest); }
   background: var(--champagne);
   color: var(--night);
   border-color: var(--champagne);
-  outline: 2px solid var(--champagne);
-  outline-offset: 4px;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  outline: none;
 }
 
 /* Mobile: the same fully visible images; no cards narrower than their column. */
