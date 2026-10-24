@@ -38,9 +38,12 @@ async function buttonHover(page,selector,expectedSurface) {
   const after=await btn.evaluate(el=>({
     bg:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color,
     border:getComputedStyle(el).borderTopColor,
-    outline:getComputedStyle(el).outlineStyle
+    outline:getComputedStyle(el).outlineStyle,
+    decoration:getComputedStyle(el).textDecorationLine
   }));
-  assert.ok(after.bg!==before.background || after.color!==before.color || after.outline==="solid", "Hover invisible: "+selector);
+  assert.ok(after.bg!==before.background || after.color!==before.color ||
+    after.outline==="solid" || after.decoration.includes("underline"),
+    "Hover invisible: "+selector);
   const surface=after.bg==="rgba(0, 0, 0, 0)"?expectedSurface:after.bg;
   assert.ok(contrast(surface,after.color)>=4.5,selector+" hover illegible "+JSON.stringify(after));
   if(after.bg==="rgba(0, 0, 0, 0)") {
@@ -164,7 +167,13 @@ try {
         }));
         equal(card.bg,STONE,"detail panel stone");
         assert.ok(contrast(card.bg,card.fg)>=4.5,"detail panel type");
-        if(width===1440) await buttonHover(page,".detail .primary",STONE);
+        if(width===1440) {
+          await buttonHover(page,".detail .primary",STONE);
+          const planAspect=await page.locator(".detail figure").evaluate(el=>{
+            const r=el.getBoundingClientRect();return r.width/r.height;
+          });
+          assert.ok(planAspect>1.26&&planAspect<1.40,"Detail plan frame not 4:3: "+planAspect);
+        }
       }
       if(width===1440) {
         if(route==="/") await page.evaluate(()=>scrollTo(0,0));
