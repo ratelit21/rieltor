@@ -1,41 +1,43 @@
 /*
- * Editorial surface system — inspired by the restraint of Aman Residences and
- * Fantastic Frank. The single entry point for surface, type and control color.
- * Structural layout and responsive grids live in globals.css.
+ * K. — final editorial material system.
+ * One restrained palette: warm taupe / forest / charcoal / champagne.
+ * This stylesheet owns color and interactive states; globals.css owns layout.
+ * No white control fills, no off-palette bronze/green surfaces.
  */
 :root {
-  --canvas: #eae5dc;
-  --warm-stone: #eae5dc;
-  --sand: #e9e3d8;
-  --surface: #f7f3ed;
-  --surface-raised: #f1ece4;
+  --canvas: #e4ddd2;
+  --warm-stone: #e4ddd2;
+  --sand: #e4ddd2;
+  --surface: #e4ddd2;
+  --surface-raised: #d8ccba;
   --night: #252b28;
-  --warm-graphite: #282b29;
-  --warm-walnut: #282b29;
+  --warm-graphite: #252b28;
+  --warm-walnut: #252b28;
   --forest: #31483f;
   --moss: #445b51;
-  --ink: #292e2b;
-  --ivory: #f7f3ed;
+  --ink: #252b28;
+  --ivory: #eee7dc;
   --champagne: #d8bc8a;
-  --muted: #d0d1cb;
-  --line: rgba(247, 243, 237, .24);
-  --line-dark: rgba(41, 46, 43, .22);
+  --champagne-soft: #b99a67;
+  --muted: #cbc6bc;
+  --line: rgba(238,231,220,.24);
+  --line-dark: rgba(37,43,40,.23);
   --label-size: clamp(15px, 1.14vw, 17px);
   --action-size: clamp(15px, 1.12vw, 16px);
 }
 html, body { background: var(--canvas); color: var(--ink); }
-::selection { background: #c9b79c; color: var(--ink); }
+::selection { background: var(--champagne); color: var(--ink); }
 
-/* All dark surfaces belong to the same neutral family, not several greens. */
+/* HERO / SCROLL STORY — deep charcoal, not seven related greens. */
 .archive-hero { background: var(--night); color: var(--ivory); }
 .archive-hero__veil {
-  background: linear-gradient(90deg, rgba(21,28,24,.91), rgba(27,32,28,.57) 53%, rgba(27,32,28,.16)),
-              linear-gradient(0deg, rgba(21,26,22,.60), transparent 58%);
+  background: linear-gradient(90deg, rgba(21,26,23,.92), rgba(27,31,28,.57) 53%, rgba(27,31,28,.17)),
+              linear-gradient(0deg, rgba(21,26,23,.64), transparent 58%);
 }
+.archive-nav a:hover { color: var(--champagne); }
 .archive-hero__caption, .archive-hero__caption a { color: var(--ivory); }
 .archive-hero__caption > span { color: var(--champagne); }
-.archive-nav a:hover { color: var(--champagne); }
-.archive-story { background: var(--warm-graphite); color: var(--ivory); }
+.archive-story { background: var(--night); color: var(--ivory); }
 .archive-story__top .archive-kicker,
 .archive-story__intro em,
 .archive-story__chapter h3 em,
@@ -43,145 +45,136 @@ html, body { background: var(--canvas); color: var(--ink); }
 .archive-story__progress-track > span { background: var(--champagne); }
 .archive-story__end a { color: var(--ivory); border-color: var(--champagne); }
 .archive-story__end a:hover { color: var(--champagne); border-color: var(--champagne); }
-.archive-principles { background: #e4ddd2; color: var(--ink); }
-.archive-principles__heading { border-color: var(--line-dark); }
-.archive-principles__heading .archive-kicker { color: var(--forest); }
-.archive-principles__heading em { color: var(--forest); }
+.archive-story__plan { background: var(--canvas); }
+.archive-story__plan img { object-fit: cover; }
+
+/* One warm stone backdrop, as in the previously approved principles block. */
+.archive-intro, .archive-principles {
+  background: var(--canvas);
+  color: var(--ink);
+}
+.archive-intro { border-color: var(--line-dark); }
+.archive-intro > .archive-kicker,
+.archive-intro h2 em { color: var(--forest); }
+.archive-principles__heading,
 .archive-principles__grid article { border-color: var(--line-dark); }
+.archive-principles__heading .archive-kicker,
+.archive-principles__heading em { color: var(--forest); }
+.archive-principles__grid article,
 .archive-principles__grid article:nth-child(2) { background: transparent; }
-.archive-principles__grid span { color: #77644c; }
+.archive-principles__grid span { color: #786143; }
 .archive-principles__grid p { color: #414942; }
+
+/* Final CTA: rich green is the full-sized statement, never a random dark card. */
 .archive-callout, .archive-page__outro {
-  color: var(--ivory);
-  background: var(--night);
-  border-color: var(--line);
+  background: var(--forest); color: var(--ivory); border-color: var(--line);
 }
 .archive-callout h2, .archive-page__outro h2 { color: var(--ivory); }
 .archive-callout h2 em, .archive-page__outro h2 em { color: var(--champagne); }
-.archive-callout__lead { color: var(--muted); }
+.archive-callout__lead { color: var(--ivory); }
 
-/* Editorial linen — one color family across ALL inner pages. */
-.archive-intro { background: var(--canvas); color: var(--ink); border-color: var(--line-dark); }
-.archive-intro > .archive-kicker, .archive-intro h2 em { color: var(--forest); }
-.archive-page, .contact, .detail { color: var(--ink); background: var(--canvas); }
-.archive-page__intro h1, .contact h1 { color: var(--ink); }
-.archive-page__intro h1 em, .contact h1 em { color: var(--forest); }
+/* Inner pages share the exact warm stone tone from the principles block. */
+.archive-page, .detail { background: var(--canvas); color: var(--ink); }
+.archive-page__intro h1 { color: var(--ink); }
+.archive-page__intro h1 em { color: var(--forest); }
 .archive-page__intro > .archive-kicker,
-.contact-story > .eyebrow { color: var(--forest); }
-.archive-page__intro > p:last-child, .contact-story__lead,
-.contact-story__aside p { color: var(--ink); }
-.contact-story__rule { background: var(--forest); }
-.selected { color: var(--ink); border-color: var(--line-dark); }
-.selected__label { color: var(--forest); }
-
-/* The same calm header on catalogue, property details and contact. */
+.archive-page__intro > p:last-child { color: var(--forest); }
 .page-nav, .archive-page__nav {
-  background: rgba(37,43,40,.98);
-  border-color: var(--line);
-  color: var(--ivory);
+  background: rgba(37,43,40,.98); border-color: var(--line); color: var(--ivory);
 }
 .page-nav a:not(.brand):not(.nav-cta):hover,
 .archive-page__nav a:not(.archive-brand):not(.nav-cta):hover { color: var(--champagne); }
-.mobile-menu__panel { background: var(--surface); color: var(--ink); border-color: var(--line-dark); }
+.mobile-menu__panel { background: var(--canvas); color: var(--ink); border-color: var(--line-dark); }
 .mobile-menu__panel a { border-color: var(--line-dark); }
-.mobile-menu__panel a:hover { background: #ded7cb; color: var(--ink); }
+.mobile-menu__panel a:hover { background: var(--champagne); color: var(--ink); }
 
-/* Button contract: all normal and hover pairs visibly contrast with the surface.
- * Primary on light: forest -> parchment on hover, retained green border.
- * Primary on dark: parchment -> champagne on hover.
- * Secondary on dark: dark translucent -> parchment on hover. */
-.archive-button, .primary {
-  background: var(--ivory); color: var(--night); border-color: var(--ivory);
+/* One button language: champagne on dark, green on stone.
+ * The hover MUST change both fill and foreground while retaining >= 4.5:1.
+ * Never fill a button with white/near-white and never leave a dark CTA
+ * on a matching dark section.
+ */
+.archive-button, .primary,
+.archive-callout .archive-button, .archive-page__outro .archive-button {
+  background: var(--champagne);
+  border: 1px solid var(--champagne);
+  color: var(--night);
 }
-.archive-button:hover, .primary:hover {
-  background: var(--champagne); border-color: var(--champagne); color: var(--night);
+.archive-button:hover, .primary:hover,
+.archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
+  background: var(--champagne-soft); border-color: var(--champagne-soft); color: var(--night);
 }
 .archive-text-link {
-  background: rgba(12,15,13,.14); border-color: rgba(247,243,237,.7); color: var(--ivory);
+  background: transparent; border-color: var(--champagne); color: var(--champagne);
 }
 .archive-text-link:hover {
-  background: var(--ivory); border-color: var(--ivory); color: var(--night);
-}
-.intro-cta, .listing-copy a, .detail .primary {
-  background: var(--forest); color: var(--ivory); border-color: var(--forest);
-}
-.intro-cta:hover, .listing-copy a:hover, .detail .primary:hover {
-  background: #ddd3c4; color: var(--forest); border-color: var(--forest);
-}
-.archive-callout .archive-button, .archive-page__outro .archive-button {
-  background: var(--ivory); color: var(--night); border-color: var(--ivory);
-}
-.archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
   background: var(--champagne); border-color: var(--champagne); color: var(--night);
 }
-.nav-cta {
-  background: transparent; border-color: rgba(247,243,237,.65); color: var(--ivory);
+.intro-cta {
+  background: var(--forest); border-color: var(--forest); color: var(--ivory);
+}
+.intro-cta:hover {
+  background: var(--champagne); border-color: var(--forest); color: var(--forest);
+}
+.nav-cta, .page-nav--light .nav-cta {
+  background: transparent; border-color: var(--champagne); color: var(--champagne);
 }
 .nav-cta:hover, .page-nav--light .nav-cta:hover {
-  background: var(--ivory); color: var(--night); border-color: var(--ivory);
+  background: var(--champagne); border-color: var(--champagne); color: var(--night);
 }
+.archive-button, .archive-text-link, .intro-cta,
+.listing-copy a, .primary, .nav-cta, .filters button {
+  transition: background-color .21s ease, border-color .21s ease, color .21s ease;
+}
+.archive-button:focus-visible, .archive-text-link:focus-visible,
+.intro-cta:focus-visible, .listing-copy a:focus-visible, .primary:focus-visible,
+.nav-cta:focus-visible, .filters button:focus-visible {
+  outline: 2px solid currentColor; outline-offset: 4px;
+}
+
+/* Archive: consistently sized full-width images, no GSAP card clipping.
+ * All six cards use precisely the same dimensions, not an alternating ratio.
+ * The paper-colored plan contrasts with a charcoal editorial information panel.
+ */
+.catalogue { color: var(--ink); }
+.filters { border-color: var(--line-dark); }
+legend, .filters strong { color: var(--forest); }
 .filters button {
-  border-color: var(--line-dark);
-  color: var(--ink);
-  background: transparent;
+  color: var(--ink); background: transparent; border-color: var(--line-dark);
 }
 .filters button:hover:not([aria-pressed="true"]) {
-  background: #d9d0c3; border-color: var(--forest); color: var(--ink);
+  background: var(--champagne); border-color: var(--forest); color: var(--ink);
 }
 .filters button[aria-pressed="true"] {
   background: var(--forest); border-color: var(--forest); color: var(--ivory);
 }
 .filters button[aria-pressed="true"]:hover {
-  background: #425d51; border-color: #425d51; color: var(--ivory);
+  background: #425c50; border-color: #425c50; color: var(--ivory);
 }
-.archive-button, .archive-text-link, .intro-cta,
-.listing-copy a, .primary, .nav-cta, .filters button {
-  transition: background-color .23s ease, border-color .23s ease, color .23s ease;
-}
-.archive-button:focus-visible, .archive-text-link:focus-visible,
-.intro-cta:focus-visible, .listing-copy a:focus-visible, .primary:focus-visible,
-.nav-cta:focus-visible, .filters button:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 4px;
-}
-
-/* The archive must read as one curated collection, not six different tiles.
- * Image frames are never clipped/translated by JS; the full frame is visible. */
-.filters { border-color: var(--line-dark); }
 .filters button:focus-visible { outline-color: var(--forest); }
-legend, .filters strong { color: var(--forest); }
-.listing-grid { gap: clamp(20px, 2.5vw, 34px); }
+.listing-grid { gap: clamp(20px,2.7vw,36px); }
 .listing, .listing:nth-child(even) {
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line-dark);
-  min-width: 0;
-  overflow: visible;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  background: var(--night); color: var(--ivory);
+  border: 1px solid rgba(37,43,40,.2);
+  min-width: 0; overflow: visible;
 }
+.listing:nth-child(even) .listing-image { order: 0; }
 .listing-image, .listing:nth-child(even) .listing-image {
-  display: block; min-width: 0; width: 100%;
-  clip-path: none;
-  transform: none;
-  background: var(--sand);
-  align-self: stretch;
+  display: block; align-self: stretch; min-width: 0; width: 100%;
+  clip-path: none; transform: none; background: var(--canvas);
 }
-.listing-image img {
-  object-fit: contain;
-  width: 100%; height: 100%;
-  transition: transform .45s ease;
-}
-.listing-copy {
-  min-width: 0;
-  color: var(--ink);
-  align-self: center;
-}
-.listing-copy h2 { color: var(--ink); }
-.listing-copy > p:first-child, .listing-copy > span { color: var(--forest); }
-.listing-copy > p:nth-of-type(2) { color: #464c47; }
+.listing-image img { object-fit: contain; width: 100%; height: 100%; transition: transform .42s ease; }
+.listing-copy { min-width: 0; color: var(--ivory); align-self: center; }
+.listing-copy h2 { color: var(--ivory); }
+.listing-copy > p:first-child, .listing-copy > span { color: var(--champagne); }
+.listing-copy > p:nth-of-type(2) { color: #dfded7; }
 .listing-copy a {
-  display: inline-flex; align-items: center;
-  gap: 12px; width: fit-content; min-width: 0;
-  text-align: center; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  min-width: 0; width: fit-content; white-space: nowrap; text-align: center;
+  background: var(--champagne); color: var(--night); border-color: var(--champagne);
+}
+.listing-copy a:hover {
+  background: var(--champagne-soft); color: var(--night); border-color: var(--champagne-soft);
 }
 .listing-copy a .listing-copy__action-label { line-height: 1.4; }
 .listing-copy a svg.listing-copy__arrow { display: block; flex: 0 0 20px; width: 20px; height: 20px; transform: none; }
@@ -189,51 +182,63 @@ legend, .filters strong { color: var(--forest); }
 .empty h2 em, .empty button { color: var(--forest); }
 .empty button { border-color: var(--forest); }
 
-/* Personal consultation: one restrained light paper panel, not a green slab. */
+/* Contact: preserve the deep green estate branding, champagne form sheet. */
+.contact { background: var(--forest); color: var(--ivory); }
+.contact-story > .eyebrow { color: var(--champagne); }
+.contact h1 { color: var(--ivory); }
+.contact h1 em { color: var(--champagne); }
+.contact-story__lead, .contact-story__aside p { color: var(--ivory); }
+.contact-story__rule { background: var(--champagne); }
+.selected { color: var(--ivory); border-color: var(--line); }
+.selected__label { color: var(--champagne); }
 .contact-panel {
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line-dark);
-  box-shadow: 0 18px 48px rgba(28,31,29,.055);
+  background: var(--champagne); color: var(--night);
+  border: 1px solid rgba(37,43,40,.16);
+  box-shadow: 0 16px 44px rgba(19,27,22,.16);
 }
-.contact-panel::before { height: 1px; background: var(--line-dark); }
+.contact-panel::before { height: 1px; background: var(--forest); }
 .contact-panel__heading h2 { color: var(--ink); }
 .contact-panel__heading h2 em { color: var(--forest); }
-.contact-panel__heading .eyebrow, .contact form label { color: #45584b; }
+.contact-panel__heading .eyebrow, .contact form label { color: var(--forest); }
 .contact input, .contact textarea {
-  color: var(--ink);
-  border-color: rgba(41,46,43,.42);
+  color: var(--ink); border-color: rgba(37,43,40,.58);
 }
-.contact input::placeholder, .contact textarea::placeholder { color: #656e67; }
+.contact input::placeholder, .contact textarea::placeholder { color: #4c5147; }
 .contact input:focus-visible, .contact textarea:focus-visible {
-  border-color: var(--forest);
-  box-shadow: 0 1px 0 var(--forest);
+  border-color: var(--forest); box-shadow: 0 1px 0 var(--forest);
 }
-.form-note { color: #49534c; }
-.contact-panel:focus-within { box-shadow: 0 20px 60px rgba(28,31,29,.11); }
-.contact-form__submit { background: var(--forest); color: var(--ivory); border-color: var(--forest); }
-.contact-form__submit:hover { background: #ddd3c4; color: var(--forest); border-color: var(--forest); }
+.form-note { color: var(--night); }
+.contact-panel:focus-within { box-shadow: 0 20px 56px rgba(19,27,22,.22); }
+.contact-form__submit {
+  background: var(--forest); color: var(--ivory); border-color: var(--forest);
+}
+.contact-form__submit:hover {
+  background: var(--canvas); color: var(--forest); border-color: var(--forest);
+}
 
-/* The detail page keeps the exact same paper/ink language. */
+/* Detail: warm stone around a dark editorial sheet + champagne action. */
 .detail-grid > div {
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line-dark);
+  min-width: 0; background: var(--night); color: var(--ivory);
+  border: 1px solid rgba(37,43,40,.22);
 }
-.detail .eyebrow, .detail dt, .detail li::before { color: var(--forest); }
-.detail h1 { color: var(--ink); }
-.detail dl, .detail ul { border-color: var(--line-dark); }
-.detail figure { background: var(--sand); border: 1px solid var(--line-dark); }
-.detail figure::after { border-color: rgba(41,46,43,.18); }
+.detail .eyebrow, .detail dt, .detail li::before { color: var(--champagne); }
+.detail h1 { color: var(--ivory); }
+.detail dl, .detail ul { border-color: var(--line); }
+.detail .detail-lead, .detail li { color: #deddd4; }
+.detail figure { background: var(--canvas); border: 0; }
+.detail figure::after { content: none; }
 .detail figcaption { color: var(--ink); }
-.detail-lead, .detail li { color: #464c47; }
+.detail .primary { background: var(--champagne); color: var(--night); border-color: var(--champagne); }
+.detail .primary:hover {
+  background: var(--champagne-soft); color: var(--night); border-color: var(--champagne-soft);
+}
 
-/* Quiet fixed-format framing: view transitions stay restrained. */
+/* Mobile: the same fully visible images; no cards narrower than their column. */
 @media (max-width: 720px) {
-  .listing-copy a { width: 100%; white-space: normal; }
-  .listing, .listing:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+  .listing, .listing:nth-child(even) { grid-template-columns: minmax(0,1fr); }
   .listing:nth-child(even) .listing-image { order: 0; }
   .listing-image { min-height: 0; aspect-ratio: 4 / 3; }
+  .listing-copy a { width: 100%; white-space: normal; }
   .detail-grid > div { padding: 28px 22px; }
   .contact-panel { padding: 30px 24px; }
 }
