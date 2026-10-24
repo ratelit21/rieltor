@@ -1,7 +1,7 @@
 /*
  * Final art direction
- * Two reference surfaces, sampled from the approved screenshots:
- * graphite-green #252B28 and warm stone #DCD0BF.
+ * Three coordinated colors from the approved direction:
+ * graphite #252B28, warm stone #DCD0BF, champagne #D7BC97.
  * Structure/responsive breakpoints: globals.css.
  * All intentional surface colors and interaction states: this file.
  */
@@ -17,8 +17,8 @@
   --surface-raised: #dccfbf;
   --sand: #dccfbf;
   --ink: #252b28;
-  --ivory: #f5f0e8;
-  --champagne: #dccfbf;
+  --ivory: #dccfbf;
+  --champagne: #d7bc97;
   --muted: #d6d0c6;
   --line: rgba(245,240,232,.28);
   --line-dark: rgba(37,43,40,.25);
@@ -51,12 +51,12 @@ html, body { background: var(--canvas); color: var(--ivory); }
 /* The screenshot's exact warm-stone surface is the one intentional contrast. */
 .archive-principles { background: var(--warm-stone); color: var(--ink); }
 .archive-principles__heading { border-color: var(--line-dark); }
-.archive-principles__heading .archive-kicker, .archive-principles__heading em,
-.archive-principles__grid span { color: var(--ink); }
+.archive-principles__heading .archive-kicker, .archive-principles__heading em { color: var(--ink); }
+.archive-principles__grid span { color: var(--champagne); }
 .archive-principles__grid article, .archive-principles__grid article:last-child {
-  background: transparent; border-color: var(--line-dark);
+  background: var(--canvas); color: var(--warm-stone); border-color: var(--line);
 }
-.archive-principles__grid h3, .archive-principles__grid p { color: var(--ink); }
+.archive-principles__grid h3, .archive-principles__grid p { color: var(--warm-stone); }
 .archive-callout, .archive-page__outro { color: var(--ivory); background: var(--canvas); border-color: var(--line); }
 .archive-callout h2, .archive-page__outro h2 { color: var(--ivory); }
 .archive-callout h2 em, .archive-page__outro h2 em,
@@ -91,52 +91,50 @@ html, body { background: var(--canvas); color: var(--ivory); }
 .mobile-menu__panel a { border-color: var(--line-dark); }
 .mobile-menu__panel a:hover { background: var(--canvas); color: var(--ivory); }
 
-/* Buttons have only two surface states. Every hover is clearly visible. */
+/* Three-tone control language: champagne actions, graphite structure, stone typography. */
 .archive-button, .primary,
 .archive-callout .archive-button, .archive-page__outro .archive-button {
-  background: var(--warm-stone);
+  background: var(--champagne);
   color: var(--ink);
-  border: 1px solid var(--warm-stone);
+  border: 1px solid var(--champagne);
 }
 .archive-button:hover, .primary:hover,
 .archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
   background: transparent;
-  color: var(--warm-stone);
-  border-color: var(--warm-stone);
+  color: var(--champagne);
+  border-color: var(--champagne);
   outline: none;
 }
 .archive-text-link, .nav-cta, .page-nav--light .nav-cta {
   background: transparent;
-  color: var(--ivory);
-  border: 1px solid rgba(245,240,232,.75);
+  color: var(--champagne);
+  border: 1px solid var(--champagne);
 }
 .archive-text-link:hover, .nav-cta:hover, .page-nav--light .nav-cta:hover {
-  background: var(--warm-stone);
+  background: var(--champagne);
   color: var(--ink);
-  border-color: var(--warm-stone);
+  border-color: var(--champagne);
   outline: none;
 }
-/* Primary controls on stone cards invert from graphite to transparent stone. */
+/* On warm stone the champagne button contrasts with the dark hover state. */
 .intro-cta, .listing-copy a, .detail .primary, .contact-form__submit {
-  background: var(--canvas);
-  color: var(--ivory);
-  border: 1px solid var(--canvas);
+  background: var(--champagne);
+  color: var(--ink);
+  border: 1px solid var(--champagne);
 }
 .intro-cta:hover, .listing-copy a:hover, .detail .primary:hover, .contact-form__submit:hover {
   background: var(--canvas);
-  color: var(--ivory);
-  border-color: var(--canvas);
+  color: var(--champagne);
+  border-color: var(--champagne);
   outline: none;
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .23em;
+  text-decoration-line: none;
 }
 /* Intro sits on graphite, so its CTA follows the dark-surface variant instead. */
 .archive-intro .intro-cta {
-  background: var(--warm-stone); color: var(--ink); border-color: var(--warm-stone);
+  background: var(--champagne); color: var(--ink); border-color: var(--champagne);
 }
 .archive-intro .intro-cta:hover {
-  background: transparent; color: var(--warm-stone); border-color: var(--warm-stone);
+  background: transparent; color: var(--champagne); border-color: var(--champagne);
 }
 .archive-button, .archive-text-link, .intro-cta, .listing-copy a,
 .primary, .nav-cta, .filters button, .contact-form__submit,
@@ -152,21 +150,21 @@ html, body { background: var(--canvas); color: var(--ivory); }
 
 /* Catalogue: graphite canvas, stone filters and six identical stone listings. */
 .filters { border-color: var(--line); }
-legend, .filters strong { color: var(--warm-stone); }
+legend, .filters strong { color: var(--champagne); }
 .filters button {
   background: transparent; color: var(--ivory);
   border: 1px solid rgba(245,240,232,.6);
 }
 .filters button:hover:not([aria-pressed="true"]) {
-  background: var(--warm-stone); border-color: var(--warm-stone); color: var(--ink);
+  background: var(--champagne); border-color: var(--champagne); color: var(--ink);
 }
 .filters button[aria-pressed="true"] {
-  background: var(--warm-stone); border-color: var(--warm-stone); color: var(--ink);
+  background: var(--champagne); border-color: var(--champagne); color: var(--ink);
 }
 .filters button[aria-pressed="true"]:hover {
-  background: transparent; color: var(--ivory); border-color: var(--warm-stone);
+  background: transparent; color: var(--champagne); border-color: var(--champagne);
 }
-.filters button:focus-visible { outline-color: var(--warm-stone); }
+.filters button:focus-visible { outline-color: var(--champagne); }
 .filters p { color: var(--ivory); }
 .listing-grid { gap: clamp(22px,2.7vw,40px); }
 .listing, .listing:nth-child(even), .listing:nth-child(3n+2) {
@@ -196,13 +194,12 @@ legend, .filters strong { color: var(--warm-stone); }
 .listing-copy a, .listing:nth-child(3n+2) .listing-copy a {
   display: inline-flex; align-items: center; justify-content: center;
   gap: 12px; min-width: 0; width: fit-content;
-  background: var(--canvas); border: 1px solid var(--canvas); color: var(--ivory);
+  background: var(--champagne); border: 1px solid var(--champagne); color: var(--ink);
   text-align: center; white-space: nowrap;
 }
 .listing-copy a:hover, .listing:nth-child(3n+2) .listing-copy a:hover {
-  background: var(--canvas); color: var(--ivory); border-color: var(--canvas);
-  outline: none;
-  text-decoration-line: underline; text-decoration-thickness: 1px; text-underline-offset: .23em;
+  background: var(--canvas); color: var(--champagne); border-color: var(--champagne);
+  outline: none; text-decoration: none;
 }
 .listing-copy a svg.listing-copy__arrow {
   display: block; flex: 0 0 20px;
@@ -210,15 +207,15 @@ legend, .filters strong { color: var(--warm-stone); }
   transform: none; align-self: center;
 }
 .empty h2 { color: var(--ivory); }
-.empty h2 em, .empty button { color: var(--warm-stone); }
-.empty button { border-color: var(--warm-stone); }
+.empty h2 em, .empty button { color: var(--champagne); }
+.empty button { border-color: var(--champagne); }
 
 /* The only light consultation surface is the stone panel. */
 .contact-panel {
   background: var(--warm-stone); color: var(--ink);
   border: 1px solid var(--line-dark); box-shadow: none;
 }
-.contact-panel::before { height: 1px; background: var(--ink); }
+.contact-panel::before { height: 2px; background: var(--champagne); }
 .contact-panel__heading h2 { color: var(--ink); }
 .contact-panel__heading h2 em, .contact-panel__heading .eyebrow,
 .contact form label { color: var(--ink); }
