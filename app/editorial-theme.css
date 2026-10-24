@@ -1,289 +1,259 @@
 /*
- * Editorial surface system — inspired by the restraint of Aman Residences and
- * Fantastic Frank. The single entry point for surface, type and control color.
- * Structural layout and responsive grids live in globals.css.
+ * Final art direction
+ * Two reference surfaces, sampled from the approved screenshots:
+ * graphite-green #252B28 and warm stone #DCD0BF.
+ * Structure/responsive breakpoints: globals.css.
+ * All intentional surface colors and interaction states: this file.
  */
 :root {
-  --canvas: #dacbb7;
-  --warm-stone: #dacbb7;
-  --sand: #e8ddcb;
-  --surface: #f1e8d9;
-  --surface-raised: #e7d9c5;
-  --night: #212722;
-  --warm-graphite: #292d29;
-  --warm-walnut: #292d29;
-  --forest: #234739;
-  --moss: #315745;
-  --ink: #222a24;
-  --ivory: #f7f0e5;
-  --champagne: #ddbe83;
-  --muted: #d8d5cc;
-  --line: rgba(247, 240, 229, .28);
-  --line-dark: rgba(34, 42, 36, .30);
-  --label-size: clamp(15px, 1.14vw, 17px);
-  --action-size: clamp(15px, 1.12vw, 16px);
+  --canvas: #252b28;
+  --night: #252b28;
+  --warm-graphite: #252b28;
+  --warm-walnut: #252b28;
+  --forest: #252b28;
+  --moss: #252b28;
+  --warm-stone: #dccfbf;
+  --surface: #dccfbf;
+  --surface-raised: #dccfbf;
+  --sand: #dccfbf;
+  --ink: #252b28;
+  --ivory: #f5f0e8;
+  --champagne: #dccfbf;
+  --muted: #d6d0c6;
+  --line: rgba(245,240,232,.28);
+  --line-dark: rgba(37,43,40,.25);
+  --label-size: clamp(15px,1.14vw,17px);
+  --action-size: clamp(15px,1.12vw,16px);
 }
-html, body { background: var(--canvas); color: var(--ink); }
-::selection { background: #c7ad84; color: var(--ink); }
+html, body { background: var(--canvas); color: var(--ivory); }
+::selection { background: var(--warm-stone); color: var(--ink); }
 
-/* All dark surfaces belong to the same neutral family, not several greens. */
+/* Home: one continuous dark architectural story, then one stone chapter. */
 .archive-hero { background: var(--night); color: var(--ivory); }
 .archive-hero__veil {
-  background: linear-gradient(90deg, rgba(21,28,24,.91), rgba(27,32,28,.57) 53%, rgba(27,32,28,.16)),
-              linear-gradient(0deg, rgba(21,26,22,.60), transparent 58%);
+  background: linear-gradient(90deg,rgba(25,31,28,.9),rgba(35,42,38,.55) 54%,rgba(35,42,38,.18)),
+              linear-gradient(0deg,rgba(22,29,26,.68),transparent 57%);
 }
+.archive-nav a:hover { color: var(--champagne); }
 .archive-hero__caption, .archive-hero__caption a { color: var(--ivory); }
 .archive-hero__caption > span { color: var(--champagne); }
-.archive-nav a:hover { color: var(--champagne); }
-.archive-story { background: var(--warm-graphite); color: var(--ivory); }
-.archive-story__top .archive-kicker,
-.archive-story__intro em,
-.archive-story__chapter h3 em,
-.archive-story__chapter-index span:first-child { color: var(--champagne); }
+.archive-intro { background: var(--canvas); color: var(--ivory); border-color: var(--line); }
+.archive-intro > .archive-kicker { color: var(--champagne); }
+.archive-intro h2 em { color: var(--champagne); }
+.archive-intro__body p { color: var(--ivory); }
+.archive-story { background: var(--canvas); color: var(--ivory); }
+.archive-story__intro em, .archive-story__top .archive-kicker,
+.archive-story__chapter h3 em, .archive-story__chapter-index span:first-child { color: var(--champagne); }
 .archive-story__progress-track > span { background: var(--champagne); }
 .archive-story__end a { color: var(--ivory); border-color: var(--champagne); }
 .archive-story__end a:hover { color: var(--champagne); border-color: var(--champagne); }
-.archive-principles { background: #ded0ba; color: var(--ink); }
+
+/* The screenshot's exact warm-stone surface is the one intentional contrast. */
+.archive-principles { background: var(--warm-stone); color: var(--ink); }
 .archive-principles__heading { border-color: var(--line-dark); }
-.archive-principles__heading .archive-kicker { color: var(--forest); }
-.archive-principles__heading em { color: var(--forest); }
-.archive-principles__grid article { border-color: var(--line-dark); }
-.archive-principles__grid article:nth-child(2) { background: transparent; }
-.archive-principles__grid span { color: var(--forest); }
-.archive-principles__grid p { color: #303b32; }
-.archive-callout, .archive-page__outro {
-  color: var(--ivory);
-  background: #193e30;
-  border-color: rgba(247,240,229,.33);
+.archive-principles__heading .archive-kicker, .archive-principles__heading em,
+.archive-principles__grid span { color: var(--ink); }
+.archive-principles__grid article, .archive-principles__grid article:last-child {
+  background: transparent; border-color: var(--line-dark);
 }
+.archive-principles__grid h3, .archive-principles__grid p { color: var(--ink); }
+.archive-callout, .archive-page__outro { color: var(--ivory); background: var(--canvas); border-color: var(--line); }
 .archive-callout h2, .archive-page__outro h2 { color: var(--ivory); }
-.archive-callout h2 em, .archive-page__outro h2 em { color: var(--champagne); }
-.archive-callout__lead { color: var(--ivory); }
+.archive-callout h2 em, .archive-page__outro h2 em,
+.archive-callout > .archive-kicker, .archive-page__outro > .archive-kicker { color: var(--champagne); }
+.archive-callout__lead { color: var(--muted); }
 
-/* Editorial linen — one color family across ALL inner pages. */
-.archive-intro { background: var(--canvas); color: var(--ink); border-color: var(--line-dark); }
-.archive-intro > .archive-kicker, .archive-intro h2 em { color: var(--forest); }
-.archive-page, .contact, .detail { color: var(--ink); background: var(--canvas); }
-.archive-page__intro h1, .contact h1 { color: var(--ink); }
-.archive-page__intro h1 em, .contact h1 em { color: var(--forest); }
-.archive-page__intro > .archive-kicker,
-.contact-story > .eyebrow { color: var(--forest); }
-.archive-page__intro > p:last-child, .contact-story__lead,
-.contact-story__aside p { color: var(--ink); }
-.contact-story__rule { background: var(--forest); }
-.selected { color: var(--ink); border-color: var(--line-dark); }
-.selected__label { color: var(--forest); }
-
-/* A focused charcoal editorial opening for the archive, then warm linen filters. */
-.archive-page__intro {
-  max-width: none;
-  background: var(--night);
-  color: var(--ivory);
-  border-bottom: 1px solid var(--line);
-}
-.archive-page__intro h1 { color: var(--ivory); }
-.archive-page__intro h1 em { color: var(--champagne); }
-.archive-page__intro > .archive-kicker { color: var(--champagne); }
+/* All internal page canvases are graphite-green, with stone cards/panels. */
+.archive-page, .contact, .detail { background: var(--canvas); color: var(--ivory); }
+.archive-page__intro { background: var(--canvas); color: var(--ivory); border-color: var(--line); }
+.archive-page__intro h1, .contact h1 { color: var(--ivory); }
+.archive-page__intro h1 em, .contact h1 em { color: var(--champagne); }
+.archive-page__intro > .archive-kicker, .contact-story > .eyebrow,
 .archive-page__intro > p:last-child { color: var(--ivory); }
+.contact-story__lead, .contact-story__aside p { color: var(--ivory); }
+.contact-story__rule { background: var(--champagne); }
+.selected { color: var(--ivory); border-color: var(--line); }
+.selected__label { color: var(--champagne); }
 
-/* The same calm header on catalogue, property details and contact. */
+/* One uninterrupted nav surface and identical mobile menu language. */
 .page-nav, .archive-page__nav {
-  background: rgba(37,43,40,.98);
-  border-color: var(--line);
+  background: rgba(37,43,40,.97);
   color: var(--ivory);
+  border-color: var(--line);
 }
 .page-nav a:not(.brand):not(.nav-cta):hover,
 .archive-page__nav a:not(.archive-brand):not(.nav-cta):hover { color: var(--champagne); }
-.mobile-menu__panel { background: var(--surface); color: var(--ink); border-color: var(--line-dark); }
+.mobile-menu__panel {
+  background: var(--warm-stone);
+  color: var(--ink);
+  border-color: var(--line-dark);
+}
 .mobile-menu__panel a { border-color: var(--line-dark); }
-.mobile-menu__panel a:hover { background: var(--surface); color: var(--ink); }
+.mobile-menu__panel a:hover { background: var(--canvas); color: var(--ivory); }
 
-/* All actions remain steady on hover: no background morph or color animation.
- * The outline is immediate, always contrasted against the hosting surface. */
+/* Buttons have only two surface states. Every hover is clearly visible. */
 .archive-button, .primary,
 .archive-callout .archive-button, .archive-page__outro .archive-button {
-  background: var(--ivory);
-  color: var(--night);
-  border: 1px solid var(--ivory);
+  background: var(--warm-stone);
+  color: var(--ink);
+  border: 1px solid var(--warm-stone);
 }
-.archive-text-link {
-  background: rgba(21,30,24,.45);
-  color: var(--ivory);
-  border: 1px solid rgba(247,240,229,.85);
+.archive-button:hover, .primary:hover,
+.archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
+  background: transparent;
+  color: var(--warm-stone);
+  border-color: var(--warm-stone);
+  outline: none;
 }
-.intro-cta, .listing-copy a, .detail .primary, .contact-form__submit {
-  background: var(--forest);
-  color: var(--ivory);
-  border: 1px solid var(--forest);
-}
-.nav-cta, .page-nav--light .nav-cta {
+.archive-text-link, .nav-cta, .page-nav--light .nav-cta {
   background: transparent;
   color: var(--ivory);
-  border: 1px solid rgba(247,240,229,.8);
+  border: 1px solid rgba(245,240,232,.75);
 }
-.filters button {
+.archive-text-link:hover, .nav-cta:hover, .page-nav--light .nav-cta:hover {
+  background: var(--warm-stone);
+  color: var(--ink);
+  border-color: var(--warm-stone);
+  outline: none;
+}
+/* Primary controls on stone cards invert from graphite to transparent stone. */
+.intro-cta, .listing-copy a, .detail .primary, .contact-form__submit {
+  background: var(--canvas);
+  color: var(--ivory);
+  border: 1px solid var(--canvas);
+}
+.intro-cta:hover, .listing-copy a:hover, .detail .primary:hover, .contact-form__submit:hover {
   background: transparent;
   color: var(--ink);
-  border: 1px solid var(--line-dark);
+  border-color: var(--ink);
+  outline: none;
 }
-.filters button[aria-pressed="true"] {
-  background: var(--forest);
-  color: var(--ivory);
-  border-color: var(--forest);
+/* Intro sits on graphite, so its CTA follows the dark-surface variant instead. */
+.archive-intro .intro-cta {
+  background: var(--warm-stone); color: var(--ink); border-color: var(--warm-stone);
+}
+.archive-intro .intro-cta:hover {
+  background: transparent; color: var(--warm-stone); border-color: var(--warm-stone);
 }
 .archive-button, .archive-text-link, .intro-cta, .listing-copy a,
 .primary, .nav-cta, .filters button, .contact-form__submit,
 .mobile-menu__toggle, .mobile-menu__panel a {
-  transition: none;
-}
-.archive-button:hover, .primary:hover,
-.archive-callout .archive-button:hover, .archive-page__outro .archive-button:hover {
-  background: var(--ivory);
-  color: var(--night);
-  border-color: var(--ivory);
-  outline: 2px solid var(--champagne);
-  outline-offset: 3px;
-}
-.archive-text-link:hover, .nav-cta:hover, .page-nav--light .nav-cta:hover {
-  background: rgba(21,30,24,.45);
-  color: var(--ivory);
-  border-color: var(--ivory);
-  outline: 2px solid var(--champagne);
-  outline-offset: 3px;
-}
-.intro-cta:hover, .listing-copy a:hover, .detail .primary:hover,
-.contact-form__submit:hover {
-  background: var(--forest);
-  color: var(--ivory);
-  border-color: var(--forest);
-  outline: 2px solid var(--forest);
-  outline-offset: 3px;
-}
-.filters button:hover:not([aria-pressed="true"]),
-.filters button[aria-pressed="true"]:hover {
-  outline: 2px solid var(--forest);
-  outline-offset: 2px;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease;
 }
 .archive-button:focus-visible, .archive-text-link:focus-visible, .intro-cta:focus-visible,
 .listing-copy a:focus-visible, .primary:focus-visible, .nav-cta:focus-visible,
-.filters button:focus-visible, .contact-form__submit:focus-visible {
-  outline: 3px solid currentColor;
-  outline-offset: 4px;
+.filters button:focus-visible, .contact-form__submit:focus-visible,
+.mobile-menu__toggle:focus-visible, .mobile-menu__panel a:focus-visible {
+  outline: 3px solid currentColor; outline-offset: 4px;
 }
 
-/* The archive must read as one curated collection, not six different tiles.
- * Image frames are never clipped/translated by JS; the full frame is visible. */
-.filters { border-color: var(--line-dark); }
-.filters button:focus-visible { outline-color: var(--forest); }
-legend, .filters strong { color: var(--forest); }
-.listing-grid { gap: clamp(20px, 2.5vw, 34px); }
-.listing, .listing:nth-child(even) {
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line-dark);
+/* Catalogue: graphite canvas, stone filters and six identical stone listings. */
+.filters { border-color: var(--line); }
+legend, .filters strong { color: var(--warm-stone); }
+.filters button {
+  background: transparent; color: var(--ivory);
+  border: 1px solid rgba(245,240,232,.6);
+}
+.filters button:hover:not([aria-pressed="true"]) {
+  background: var(--warm-stone); border-color: var(--warm-stone); color: var(--ink);
+}
+.filters button[aria-pressed="true"] {
+  background: var(--warm-stone); border-color: var(--warm-stone); color: var(--ink);
+}
+.filters button[aria-pressed="true"]:hover {
+  background: transparent; color: var(--ivory); border-color: var(--warm-stone);
+}
+.filters button:focus-visible { outline-color: var(--warm-stone); }
+.filters p { color: var(--ivory); }
+.listing-grid { gap: clamp(22px,2.7vw,40px); }
+.listing, .listing:nth-child(even), .listing:nth-child(3n+2) {
+  display: grid;
   min-width: 0;
   overflow: visible;
+  background: var(--warm-stone);
+  border: 1px solid var(--line-dark);
+  color: var(--ink);
 }
 .listing-image, .listing:nth-child(even) .listing-image {
   display: block; min-width: 0; width: 100%;
-  clip-path: none;
-  transform: none;
-  background: var(--sand);
   align-self: stretch;
+  background: var(--warm-stone);
+  clip-path: none; transform: none;
 }
-.listing-image img {
-  object-fit: contain;
-  width: 100%; height: 100%;
-  transition: transform .45s ease;
-}
-.listing-copy {
-  min-width: 0;
-  color: var(--ink);
-  align-self: center;
-}
-.listing-copy h2 { color: var(--ink); }
-.listing-copy > p:first-child, .listing-copy > span { color: var(--forest); }
-.listing-copy > p:nth-of-type(2) { color: var(--ink); }
-.listing-copy a {
-  display: inline-flex; align-items: center;
-  gap: 12px; width: fit-content; min-width: 0;
+.listing-image img { object-fit: contain; transition: transform .35s ease; }
+.listing-copy, .listing:nth-child(3n+2) .listing-copy { color: var(--ink); min-width: 0; }
+.listing-copy h2, .listing:nth-child(3n+2) .listing-copy h2 { color: var(--ink); }
+.listing-copy > p:first-child, .listing-copy > span,
+.listing:nth-child(3n+2) .listing-copy > p:first-child,
+.listing:nth-child(3n+2) .listing-copy > span { color: var(--ink); opacity: .84; }
+.listing-copy > p:nth-of-type(2),
+.listing:nth-child(3n+2) .listing-copy > p:nth-of-type(2) { color: var(--ink); }
+.listing-copy a, .listing:nth-child(3n+2) .listing-copy a {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 12px; min-width: 0; width: fit-content;
+  background: var(--canvas); border: 1px solid var(--canvas); color: var(--ivory);
   text-align: center; white-space: nowrap;
 }
-.listing-copy a .listing-copy__action-label { line-height: 1.4; }
-.listing-copy a svg.listing-copy__arrow { display: block; flex: 0 0 20px; width: 20px; height: 20px; transform: none; }
-.empty h2 { color: var(--ink); }
-.empty h2 em, .empty button { color: var(--forest); }
-.empty button { border-color: var(--forest); }
+.listing-copy a:hover, .listing:nth-child(3n+2) .listing-copy a:hover {
+  background: transparent; color: var(--ink); border-color: var(--ink); outline: none;
+}
+.listing-copy a svg.listing-copy__arrow {
+  display: block; flex: 0 0 20px;
+  width: 20px; height: 20px;
+  transform: none; align-self: center;
+}
+.empty h2 { color: var(--ivory); }
+.empty h2 em, .empty button { color: var(--warm-stone); }
+.empty button { border-color: var(--warm-stone); }
 
-/* Two darker editorial entries among six linen cards: restraint, not a checkerboard. */
-.listing:nth-child(3n+2) {
-  background: var(--night);
-  border-color: var(--night);
-}
-.listing:nth-child(3n+2) .listing-copy { color: var(--ivory); }
-.listing:nth-child(3n+2) .listing-copy h2,
-.listing:nth-child(3n+2) .listing-copy > p:nth-of-type(2) { color: var(--ivory); }
-.listing:nth-child(3n+2) .listing-copy > p:first-child,
-.listing:nth-child(3n+2) .listing-copy > span { color: var(--champagne); }
-.listing:nth-child(3n+2) .listing-copy a {
-  background: var(--ivory);
-  border-color: var(--ivory);
-  color: var(--night);
-}
-.listing:nth-child(3n+2) .listing-copy a:hover {
-  background: var(--ivory);
-  color: var(--night);
-  border-color: var(--ivory);
-  outline: 2px solid var(--champagne);
-  outline-offset: 3px;
-}
-
-/* Personal consultation: charcoal form over a warm linen canvas. */
+/* The only light consultation surface is the stone panel. */
 .contact-panel {
-  background: var(--night);
-  color: var(--ivory);
-  border: 1px solid var(--line);
-  box-shadow: 0 22px 60px rgba(22,28,23,.15);
+  background: var(--warm-stone); color: var(--ink);
+  border: 1px solid var(--line-dark); box-shadow: none;
 }
-.contact-panel::before { height: 1px; background: var(--champagne); }
-.contact-panel__heading h2 { color: var(--ivory); }
-.contact-panel__heading h2 em { color: var(--champagne); }
-.contact-panel__heading .eyebrow, .contact form label { color: var(--champagne); }
+.contact-panel::before { height: 1px; background: var(--ink); }
+.contact-panel__heading h2 { color: var(--ink); }
+.contact-panel__heading h2 em, .contact-panel__heading .eyebrow,
+.contact form label { color: var(--ink); }
 .contact input, .contact textarea {
-  color: var(--ivory);
-  border-color: rgba(247,240,229,.60);
+  color: var(--ink);
+  border-color: rgba(37,43,40,.52);
 }
-.contact input::placeholder, .contact textarea::placeholder { color: #c3c8c1; }
+.contact input::placeholder, .contact textarea::placeholder { color: #555b56; }
 .contact input:focus-visible, .contact textarea:focus-visible {
-  border-color: var(--champagne);
-  box-shadow: 0 1px 0 var(--champagne);
+  border-color: var(--ink); box-shadow: 0 1px 0 var(--ink);
 }
-.form-note { color: var(--ivory); }
-.contact-panel:focus-within { box-shadow: 0 24px 68px rgba(22,28,23,.23); }
+.form-note { color: var(--ink); }
+.contact-panel:focus-within { box-shadow: 0 10px 35px rgba(0,0,0,.08); }
 
-/* The detail page keeps the exact same paper/ink language. */
+/* Property page: stone content panel and plan, graphite surrounding canvas. */
 .detail-grid > div {
-  background: var(--night);
-  color: var(--ivory);
-  border: 1px solid var(--line);
+  min-width: 0; background: var(--warm-stone);
+  color: var(--ink); border: 1px solid var(--line-dark);
 }
-.detail .eyebrow, .detail dt, .detail li::before { color: var(--champagne); }
-.detail h1 { color: var(--ivory); }
-.detail dl, .detail ul { border-color: var(--line); }
-.detail figure { background: var(--sand); border: 1px solid var(--line-dark); }
-.detail figure::after { border-color: rgba(41,46,43,.18); }
+.detail .eyebrow, .detail dt, .detail li::before { color: var(--ink); }
+.detail h1 { color: var(--ink); }
+.detail dl, .detail ul { border-color: var(--line-dark); }
+.detail figure { background: var(--warm-stone); border: 1px solid var(--line-dark); }
+.detail figure::after { border-color: var(--line-dark); }
 .detail figcaption { color: var(--ink); }
-.detail-lead, .detail li { color: var(--ivory); }
+.detail-lead, .detail li { color: var(--ink); }
 
-/* Quiet fixed-format framing: view transitions stay restrained. */
+/* Global consistency of utility copy: not mini captions or heavy uppercase. */
+.eyebrow, .archive-kicker, legend, .listing-copy > span {
+  font-size: var(--label-size);
+  font-weight: 400; text-transform: none; letter-spacing: .01em;
+}
 @media (max-width: 720px) {
-  .listing-copy a { width: 100%; white-space: normal; }
-  .listing, .listing:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+  .listing, .listing:nth-child(even), .listing:nth-child(3n+2) {
+    grid-template-columns: minmax(0,1fr);
+  }
   .listing:nth-child(even) .listing-image { order: 0; }
-  .listing-image { min-height: 0; aspect-ratio: 4 / 3; }
-  .detail-grid > div { padding: 28px 22px; }
-  .contact-panel { padding: 30px 24px; }
+  .listing-image { min-height: 0; aspect-ratio: 4/3; }
+  .listing-copy a, .listing:nth-child(3n+2) .listing-copy a { width: 100%; white-space: normal; }
+  .contact-panel, .detail-grid > div { padding: 30px 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .listing-image img { transition: none; }
+  .listing-image img, .archive-button, .archive-text-link, .intro-cta,
+  .listing-copy a, .primary, .nav-cta, .filters button { transition: none; }
 }
