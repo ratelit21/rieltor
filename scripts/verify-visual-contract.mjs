@@ -116,14 +116,13 @@ try {
         await cta.hover();
         const hovered=await cta.evaluate(el=>{
           const st=getComputedStyle(el);
-          return {bg:st.backgroundColor,fg:st.color,outline:st.outlineStyle,
-            outlineWidth:st.outlineWidth,transition:st.transitionDuration};
+          return {bg:st.backgroundColor,fg:st.color,decoration:st.textDecorationLine,
+            transition:st.transitionDuration};
         });
         assert.equal(hovered.bg,normal.bg,"CTA fill changed on hover");
         assert.equal(hovered.fg,normal.fg,"CTA text changed on hover");
         assert.ok(parseFloat(hovered.transition)<=0.001,"CTA hover animates");
-        assert.equal(hovered.outline,"solid","CTA hover lacks feedback");
-        assert.ok(parseFloat(hovered.outlineWidth)>=2,"CTA outline insufficient");
+        assert.ok(hovered.decoration.includes("underline"),"CTA hover lacks subtle underline");
         assert.ok(contrast(hovered.bg,hovered.fg)>=4.5,
           "CTA hover foreground lost contrast: "+JSON.stringify(hovered));
         console.log("STATIC HOVER",width,JSON.stringify({normal,hovered}));
@@ -182,14 +181,13 @@ try {
           const state=await target.evaluate(el=>{
             const st=getComputedStyle(el);
             return {bg:st.backgroundColor,fg:st.color,
-              outline:st.outlineStyle,outlineWidth:st.outlineWidth,
-              transition:st.transitionDuration};
+              decoration:st.textDecorationLine,transition:st.transitionDuration};
           });
           assert.equal(state.bg,before.bg,"Button fill animates/changes: "+selector);
           assert.equal(state.fg,before.fg,"Button foreground animates/changes: "+selector);
           assert.ok(parseFloat(state.transition)<=0.001,"Button has transitions: "+selector);
-          assert.equal(state.outline,"solid","Missing stable outline: "+selector);
-          assert.ok(parseFloat(state.outlineWidth)>=2,"Outline too subtle: "+selector);
+          assert.ok(state.decoration.includes("underline"),
+            "Missing non-animated text underline: "+selector);
           if(!state.bg.startsWith("rgba")) {
             assert.ok(contrast(state.bg,state.fg)>=4.5,
               "Hover contrast fails for "+selector+": "+JSON.stringify(state));
