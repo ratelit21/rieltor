@@ -17,7 +17,7 @@ function contrast(a,b) {
   const [hi,lo] = [luminance(a),luminance(b)].sort((a,b)=>b-a);
   return (hi+.05)/(lo+.05);
 }
-const DARK="rgb(37, 43, 40)", STONE="rgb(220, 207, 191)";
+const DARK="rgb(37, 43, 40)", STONE="rgb(220, 207, 191)", GOLD="rgb(215, 188, 151)";
 function equal(actual,expected,description) {
   assert.equal(actual,expected,description+" expected "+expected+", got "+actual);
 }
@@ -81,6 +81,19 @@ try {
         const heading=await page.locator(".archive-principles__heading h2").evaluate(el=>getComputedStyle(el).color);
         assert.ok(contrast(STONE,heading)>=4.5,"principles heading too light");
         equal(await page.locator(".archive-principles__grid article").count(),3,"three principle cards");
+        const principles=await page.locator(".archive-principles__grid article").evaluateAll(els=>els.map(el=>({
+          bg:getComputedStyle(el).backgroundColor,
+          number:getComputedStyle(el.querySelector("span")).color,
+          text:getComputedStyle(el.querySelector("h3")).color,
+        })));
+        for(const item of principles) {
+          equal(item.bg,DARK,"principle panel");
+          equal(item.number,GOLD,"champagne principle numeral");
+          assert.ok(contrast(item.bg,item.number)>=3,"large number contrast");
+          assert.ok(contrast(item.bg,item.text)>=4.5,"principle text contrast");
+        }
+        const heroPrimary=await page.locator(".archive-actions .archive-button").evaluate(el=>getComputedStyle(el).backgroundColor);
+        equal(heroPrimary,GOLD,"hero champagne CTA");
         assert.equal(await page.locator("svg.archive-story__end-arrow").count(),1);
         if(width===390) {
           await page.getByRole("button",{name:"Открыть меню"}).click();
@@ -100,6 +113,13 @@ try {
       if(route==="/kvartiry/") {
         equal(theme.canvas,DARK,"catalogue canvas");
         equal(await page.locator("svg.listing-copy__arrow").count(),6,"all six arrow icons");
+        const cardButton=await page.locator(".listing-copy a").first().evaluate(el=>({
+          bg:getComputedStyle(el).backgroundColor, fg:getComputedStyle(el).color,
+        }));
+        equal(cardButton.bg,GOLD,"catalogue accent CTA");
+        assert.ok(contrast(cardButton.bg,cardButton.fg)>=4.5,"catalogue accent button contrast");
+        const selectedFilter=await page.locator('.filters button[aria-pressed="true"]').first().evaluate(el=>getComputedStyle(el).backgroundColor);
+        equal(selectedFilter,GOLD,"selected champagne filter");
         equal(await page.locator(".listing-image span").count(),0,"no arbitrary plan badges");
         for(let i=0;i<6;i++) {
           const img=page.locator(".listing-image img").nth(i);
